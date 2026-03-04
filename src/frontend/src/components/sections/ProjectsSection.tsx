@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { useIntersectionObserver } from "../../hooks/useIntersectionObserver";
 
@@ -79,6 +80,7 @@ function TiltArticle({
   "aria-labelledby": labelledBy,
 }: TiltArticleProps) {
   const ref = useRef<HTMLElement>(null);
+  const [glowStyle, setGlowStyle] = useState({});
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     const el = ref.current;
@@ -90,6 +92,10 @@ function TiltArticle({
     const dy = ((e.clientY - cy) / (rect.height / 2)) * 6;
     el.style.transform = `perspective(800px) rotateX(${-dy}deg) rotateY(${dx}deg)`;
     el.style.transition = "transform 0.1s ease";
+    setGlowStyle({
+      boxShadow:
+        "0 8px 40px oklch(0.58 0.26 340 / 0.25), 0 0 60px oklch(0.58 0.26 340 / 0.1)",
+    });
   };
 
   const handleMouseLeave = () => {
@@ -97,19 +103,69 @@ function TiltArticle({
     if (!el) return;
     el.style.transform = "perspective(800px) rotateX(0deg) rotateY(0deg)";
     el.style.transition = "transform 0.4s cubic-bezier(0.22,1,0.36,1)";
+    setGlowStyle({});
   };
 
   return (
     <article
       ref={ref}
       className={`tilt-card ${className ?? ""}`}
-      style={style}
+      style={{ ...style, ...glowStyle, transition: "box-shadow 0.3s ease" }}
       aria-labelledby={labelledBy}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
       {children}
     </article>
+  );
+}
+
+function InteractiveMathBlock({ children }: { children: React.ReactNode }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <motion.div
+      style={{
+        background: hovered ? "oklch(0.16 0.02 280)" : "oklch(0.13 0.01 280)",
+        border: hovered
+          ? "1px solid oklch(0.58 0.26 340 / 0.5)"
+          : "1px solid oklch(0.25 0.02 340)",
+        transition: "background 0.25s ease, border 0.25s ease",
+        boxShadow: hovered ? "0 0 20px oklch(0.58 0.26 340 / 0.15)" : "none",
+      }}
+      className="p-6 katex-dark cursor-default"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function InteractiveLi({ text, color }: { text: string; color: string }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <li
+      className="flex items-center gap-3 font-syne text-sm"
+      style={{
+        color: "oklch(0.70 0.02 280)",
+        transform: hovered ? "translateX(4px)" : "translateX(0)",
+        transition:
+          "transform 0.2s cubic-bezier(0.22,1,0.36,1), color 0.2s ease",
+      }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <span
+        className="rounded-full flex-shrink-0 transition-all duration-200"
+        style={{
+          background: color,
+          width: hovered ? "10px" : "6px",
+          height: hovered ? "10px" : "6px",
+        }}
+        aria-hidden="true"
+      />
+      {text}
+    </li>
   );
 }
 
@@ -125,7 +181,7 @@ export default function ProjectsSection() {
     >
       {/* Section number */}
       <div
-        className="absolute top-8 right-6 z-10 pointer-events-none"
+        className="absolute top-8 right-14 z-10 pointer-events-none"
         aria-hidden="true"
       >
         <span
@@ -162,25 +218,35 @@ export default function ProjectsSection() {
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          <p
-            className="font-syne text-xs tracking-[0.4em] uppercase mb-4 flex items-center gap-3"
+          <motion.p
+            className="font-syne text-xs tracking-[0.4em] uppercase mb-4 flex items-center gap-3 cursor-default"
             style={{ color: "oklch(0.58 0.26 340)" }}
+            whileHover={{
+              letterSpacing: "0.6em",
+              transition: { duration: 0.3 },
+            }}
           >
-            <span
-              className="inline-block w-8 h-px"
-              style={{ background: "oklch(0.58 0.26 340)" }}
+            <motion.span
+              className="inline-block h-px"
+              style={{ background: "oklch(0.58 0.26 340)", width: "32px" }}
+              whileHover={{ width: "56px", transition: { duration: 0.3 } }}
             />
             Selected Work
-          </p>
+          </motion.p>
           <div className="flex items-end justify-between flex-wrap gap-4">
-            <h2
+            <motion.h2
               id="work-heading"
-              className="font-playfair text-5xl md:text-6xl text-dark-bg leading-tight"
+              className="font-playfair text-5xl md:text-6xl text-dark-bg leading-tight cursor-default"
+              whileHover={{
+                textShadow: "0 0 30px oklch(0.58 0.26 340 / 0.5)",
+                scale: 1.01,
+                transition: { duration: 0.2 },
+              }}
             >
               Projects That
               <br />
               <em className="text-gradient-pink not-italic">Push Boundaries</em>
-            </h2>
+            </motion.h2>
             <p className="font-syne text-xs tracking-[0.3em] uppercase text-dark-bg/40 border border-dark-bg/20 px-4 py-2">
               Quality &gt; Quantity
             </p>
@@ -236,25 +302,21 @@ export default function ProjectsSection() {
                   />
 
                   {/* Math formula */}
-                  <div
-                    className="mt-6 p-4 katex-dark"
-                    style={{
-                      background: "oklch(0.13 0.01 280)",
-                      border: "1px solid oklch(0.25 0.02 340)",
-                    }}
-                  >
-                    <p
-                      className="font-syne text-xs uppercase tracking-wider mb-3"
-                      style={{ color: "oklch(0.55 0.02 280)" }}
-                    >
-                      Drag Formula
-                    </p>
-                    <div className="text-near-white">
-                      <MathBlock
-                        formula="F_{drag} = \\frac{1}{2} \\rho v^2 C_d A"
-                        display={true}
-                      />
-                    </div>
+                  <div className="mt-6">
+                    <InteractiveMathBlock>
+                      <p
+                        className="font-syne text-xs uppercase tracking-wider mb-3"
+                        style={{ color: "oklch(0.55 0.02 280)" }}
+                      >
+                        Drag Formula
+                      </p>
+                      <div className="text-near-white">
+                        <MathBlock
+                          formula="F_{drag} = \\frac{1}{2} \\rho v^2 C_d A"
+                          display={true}
+                        />
+                      </div>
+                    </InteractiveMathBlock>
                   </div>
                 </div>
 
@@ -289,14 +351,17 @@ export default function ProjectsSection() {
                       </div>
                     </div>
 
-                    <h3
+                    <motion.h3
                       id="proj1-heading"
-                      className="font-playfair text-4xl text-dark-bg mb-4 leading-tight"
+                      className="font-playfair text-4xl text-dark-bg mb-4 leading-tight cursor-default"
+                      whileHover={{
+                        textShadow: "0 0 30px oklch(0.58 0.26 340 / 0.4)",
+                        scale: 1.01,
+                        transition: { duration: 0.2 },
+                      }}
                     >
-                      Wind Physics
-                      <br />
-                      in Gaming
-                    </h3>
+                      Wind Physics in Gaming
+                    </motion.h3>
 
                     <p className="font-syne text-dark-bg/60 leading-relaxed mb-6">
                       A custom wind simulation engine built in pure C. Models
@@ -311,17 +376,11 @@ export default function ProjectsSection() {
                         "Dynamic velocity field simulation",
                         "Memory-efficient WindField structs",
                       ].map((item) => (
-                        <li
+                        <InteractiveLi
                           key={item}
-                          className="flex items-center gap-3 font-syne text-sm text-dark-bg/70"
-                        >
-                          <span
-                            className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                            style={{ background: "oklch(0.58 0.26 340)" }}
-                            aria-hidden="true"
-                          />
-                          {item}
-                        </li>
+                          text={item}
+                          color="oklch(0.58 0.26 340)"
+                        />
                       ))}
                     </ul>
                   </div>
@@ -388,14 +447,17 @@ export default function ProjectsSection() {
                       </div>
                     </div>
 
-                    <h3
+                    <motion.h3
                       id="proj2-heading"
-                      className="font-playfair text-4xl text-dark-bg mb-4 leading-tight"
+                      className="font-playfair text-4xl text-dark-bg mb-4 leading-tight cursor-default"
+                      whileHover={{
+                        textShadow: "0 0 30px oklch(0.42 0.16 345 / 0.4)",
+                        scale: 1.01,
+                        transition: { duration: 0.2 },
+                      }}
                     >
-                      Large-Scale
-                      <br />
-                      Numerical Computation
-                    </h3>
+                      Large-Scale Numerical Computation
+                    </motion.h3>
 
                     <p className="font-syne text-dark-bg/60 leading-relaxed mb-6">
                       Solving massive numerical problems — from gravitational
@@ -409,17 +471,11 @@ export default function ProjectsSection() {
                         "Poisson solver for field equations",
                         "64-bit floating point precision",
                       ].map((item) => (
-                        <li
+                        <InteractiveLi
                           key={item}
-                          className="flex items-center gap-3 font-syne text-sm text-dark-bg/70"
-                        >
-                          <span
-                            className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                            style={{ background: "oklch(0.42 0.16 345)" }}
-                            aria-hidden="true"
-                          />
-                          {item}
-                        </li>
+                          text={item}
+                          color="oklch(0.42 0.16 345)"
+                        />
                       ))}
                     </ul>
                   </div>
@@ -447,20 +503,14 @@ export default function ProjectsSection() {
                   style={{ background: "oklch(0.09 0.01 280)" }}
                 >
                   <p
-                    className="font-syne text-xs tracking-[0.3em] uppercase mb-8"
+                    className="font-syne text-xs uppercase tracking-[0.3em] mb-8"
                     style={{ color: "oklch(0.55 0.02 280)" }}
                   >
                     Mathematical Foundations
                   </p>
 
                   <div className="space-y-6">
-                    <div
-                      className="p-6 katex-dark"
-                      style={{
-                        background: "oklch(0.13 0.01 280)",
-                        border: "1px solid oklch(0.25 0.02 340)",
-                      }}
-                    >
+                    <InteractiveMathBlock>
                       <p
                         className="font-syne text-xs uppercase tracking-wider mb-3"
                         style={{ color: "oklch(0.55 0.02 280)" }}
@@ -479,15 +529,9 @@ export default function ProjectsSection() {
                       >
                         Gravitational force between two masses
                       </p>
-                    </div>
+                    </InteractiveMathBlock>
 
-                    <div
-                      className="p-6 katex-dark"
-                      style={{
-                        background: "oklch(0.13 0.01 280)",
-                        border: "1px solid oklch(0.25 0.02 340)",
-                      }}
-                    >
+                    <InteractiveMathBlock>
                       <p
                         className="font-syne text-xs uppercase tracking-wider mb-3"
                         style={{ color: "oklch(0.55 0.02 280)" }}
@@ -506,15 +550,9 @@ export default function ProjectsSection() {
                       >
                         Gravitational potential field
                       </p>
-                    </div>
+                    </InteractiveMathBlock>
 
-                    <div
-                      className="p-6 katex-dark"
-                      style={{
-                        background: "oklch(0.13 0.01 280)",
-                        border: "1px solid oklch(0.25 0.02 340)",
-                      }}
-                    >
+                    <InteractiveMathBlock>
                       <p
                         className="font-syne text-xs uppercase tracking-wider mb-3"
                         style={{ color: "oklch(0.55 0.02 280)" }}
@@ -530,7 +568,7 @@ export default function ProjectsSection() {
                       >
                         Foundation of all dynamics
                       </p>
-                    </div>
+                    </InteractiveMathBlock>
                   </div>
                 </div>
               </div>

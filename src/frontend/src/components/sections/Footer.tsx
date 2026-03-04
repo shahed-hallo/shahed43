@@ -196,9 +196,8 @@ export default function Footer() {
               className="font-syne text-xs leading-relaxed mt-6"
               style={{ color: "oklch(0.35 0.02 280)" }}
             >
-              For collaborations, commissions, or
-              <br />
-              just to say hello — reach out anytime.
+              For collaborations, commissions, or just to say hello — reach out
+              anytime.
             </p>
           </div>
         </div>

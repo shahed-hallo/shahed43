@@ -257,23 +257,7 @@
   animation: shimmer 3s linear infinite;
 }
 
-/* ─── Custom scrollbar — fuchsia pink interactive ─── */
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track {
-  background: oklch(0.09 0.01 280);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, oklch(0.72 0.22 320), oklch(0.58 0.26 340), oklch(0.42 0.16 345));
-  border-radius: 4px;
-  box-shadow: 0 0 8px oklch(0.58 0.26 340 / 0.6), 0 0 16px oklch(0.58 0.26 340 / 0.3);
-  transition: box-shadow 0.2s ease, background 0.2s ease;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, oklch(0.82 0.24 320), oklch(0.68 0.28 340), oklch(0.52 0.20 345));
-  box-shadow: 0 0 16px oklch(0.58 0.26 340 / 0.9), 0 0 32px oklch(0.58 0.26 340 / 0.5);
-}
-::-webkit-scrollbar-corner { background: oklch(0.09 0.01 280); }
+/* ─── Scrollbar: use browser default ─── */
 
 /* ─── Testimonial slider ─── */
 .testimonial-slider {
@@ -453,31 +437,8 @@
   100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
 }
 
-/* ─── Typing cursor blink ─── */
-@keyframes typing-cursor {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
-}
 
-.typing-cursor::after {
-  content: "█";
-  animation: typing-cursor 0.7s ease infinite;
-  color: oklch(0.72 0.22 320);
-  margin-left: 2px;
-  font-size: 0.85em;
-}
-
-/* ─── Stagger word reveal ─── */
-@keyframes stagger-word {
-  from { opacity: 0; transform: translateY(40px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.word-reveal {
-  display: inline-block;
-  opacity: 0;
-  animation: stagger-word 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
+/* ─── Stagger word reveal (removed — no typing/word animation) ─── */
 
 /* ─── Tilt card ─── */
 .tilt-card {

@@ -9,41 +9,39 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import PinkCursor from "./components/PinkCursor";
+import RightProgressBar from "./components/RightProgressBar";
 import HomePage from "./pages/HomePage";
 import PrivacyPage from "./pages/PrivacyPage";
 import TermsPage from "./pages/TermsPage";
 
-function ScrollProgressBar() {
+function ScrollBrightnessDim() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
       const docHeight = document.body.scrollHeight - window.innerHeight;
-      const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-      setProgress(Math.min(100, Math.max(0, pct)));
+      setProgress(docHeight > 0 ? Math.min(1, scrollTop / docHeight) : 0);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // At top: opacity 0 (full brightness). At bottom: opacity 0.28 (gentle dim, still readable).
+  const dimOpacity = progress * 0.28;
+
   return (
     <div
+      aria-hidden="true"
       style={{
         position: "fixed",
-        top: 0,
-        left: 0,
-        width: `${progress}%`,
-        height: "3px",
-        zIndex: 9998,
-        background:
-          "linear-gradient(90deg, oklch(0.42 0.16 345), oklch(0.58 0.26 340), oklch(0.72 0.22 320), oklch(0.82 0.18 300))",
-        boxShadow:
-          "0 0 8px oklch(0.58 0.26 340 / 0.8), 0 0 20px oklch(0.58 0.26 340 / 0.4)",
-        transition: "width 0.1s linear",
-        borderRadius: "0 2px 2px 0",
+        inset: 0,
+        zIndex: 40,
+        pointerEvents: "none",
+        background: "oklch(0.06 0.015 280)",
+        opacity: dimOpacity,
+        transition: "opacity 0.12s linear",
       }}
-      aria-hidden="true"
     />
   );
 }
@@ -52,7 +50,8 @@ function RootLayout() {
   return (
     <>
       <PinkCursor />
-      <ScrollProgressBar />
+      <RightProgressBar />
+      <ScrollBrightnessDim />
       <div>
         <Outlet />
         <Toaster position="bottom-right" />

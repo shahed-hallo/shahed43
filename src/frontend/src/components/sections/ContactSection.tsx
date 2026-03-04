@@ -9,6 +9,7 @@ import {
   Twitter,
   Youtube,
 } from "lucide-react";
+import { motion } from "motion/react";
 import { type FormEvent, useState } from "react";
 import { toast } from "sonner";
 import { useIntersectionObserver } from "../../hooks/useIntersectionObserver";
@@ -26,8 +27,8 @@ const socialLinks = [
     icon: Linkedin,
     label: "LinkedIn",
     href: "https://linkedin.com/in/genzthepixel",
-    color: "oklch(0.55 0.15 220)",
-    hoverBg: "oklch(0.55 0.15 220 / 0.1)",
+    color: "oklch(0.72 0.22 320)",
+    hoverBg: "oklch(0.72 0.22 320 / 0.1)",
   },
   {
     icon: Twitter,
@@ -44,6 +45,9 @@ export default function ContactSection() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [mouseX, setMouseX] = useState(0);
+  const [mouseY, setMouseY] = useState(0);
+  const [isMouseOver, setIsMouseOver] = useState(false);
 
   const { mutate: sendMessage, isPending } = useSendMessage();
 
@@ -70,12 +74,21 @@ export default function ContactSection() {
     );
   };
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMouseX(e.clientX - rect.left);
+    setMouseY(e.clientY - rect.top);
+  };
+
   return (
     <section
       id="contact"
       ref={sectionRef as React.RefObject<HTMLElement>}
       className="relative py-32 overflow-hidden mesh-gradient-hero"
       aria-labelledby="contact-heading"
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsMouseOver(true)}
+      onMouseLeave={() => setIsMouseOver(false)}
     >
       {/* Background noise overlay */}
       <div
@@ -93,6 +106,20 @@ export default function ContactSection() {
         className="absolute inset-0 pointer-events-none overflow-hidden"
         aria-hidden="true"
       >
+        {/* Mouse-tracking orb */}
+        {isMouseOver && (
+          <div
+            className="absolute rounded-full blur-3xl"
+            style={{
+              width: "300px",
+              height: "300px",
+              background: "oklch(0.58 0.26 340 / 0.12)",
+              left: mouseX - 150,
+              top: mouseY - 150,
+              transition: "left 0.5s ease, top 0.5s ease",
+            }}
+          />
+        )}
         <div
           className="animate-orb-1 absolute top-0 left-1/4 w-[400px] h-[400px] rounded-full blur-3xl"
           style={{ background: "oklch(0.58 0.26 340 / 0.12)" }}
@@ -117,68 +144,79 @@ export default function ContactSection() {
                 : "opacity-0 -translate-x-10"
             }`}
           >
-            <p
-              className="font-syne text-xs tracking-[0.4em] uppercase mb-4 flex items-center gap-3"
+            <motion.p
+              className="font-syne text-xs tracking-[0.4em] uppercase mb-4 flex items-center gap-3 cursor-default"
               style={{ color: "oklch(0.72 0.22 320)" }}
+              whileHover={{
+                letterSpacing: "0.6em",
+                transition: { duration: 0.3 },
+              }}
             >
-              <span
-                className="inline-block w-8 h-px"
-                style={{ background: "oklch(0.72 0.22 320)" }}
+              <motion.span
+                className="inline-block h-px"
+                style={{ background: "oklch(0.72 0.22 320)", width: "32px" }}
+                whileHover={{ width: "56px", transition: { duration: 0.3 } }}
               />
               Get in Touch
-            </p>
+            </motion.p>
 
-            <h2
+            <motion.h2
               id="contact-heading"
-              className="font-playfair text-5xl md:text-6xl text-near-white mb-8 leading-tight"
+              className="font-playfair text-5xl md:text-6xl text-near-white mb-8 leading-tight cursor-default"
+              whileHover={{
+                textShadow: "0 0 30px oklch(0.58 0.26 340 / 0.8)",
+                scale: 1.01,
+                transition: { duration: 0.2 },
+              }}
             >
               Let's Create
               <br />
               Something
               <br />
               <em className="text-gradient-pink not-italic">Extraordinary</em>
-            </h2>
+            </motion.h2>
 
-            <p className="font-syne text-near-white/60 text-base leading-relaxed mb-12 max-w-sm">
+            <motion.p
+              className="font-syne text-base leading-relaxed mb-12 max-w-sm cursor-default"
+              style={{ color: "oklch(0.75 0.05 280)" }}
+              whileHover={{
+                color: "oklch(0.92 0.02 60)",
+                borderLeft: "2px solid oklch(0.58 0.26 340)",
+                paddingLeft: "12px",
+                transition: { duration: 0.2 },
+              }}
+            >
               Have a project in mind? Want to collaborate on physics simulation,
               numerical computation, or just want to say hello? I'd love to hear
               from you.
-            </p>
+            </motion.p>
 
             {/* Social links */}
             <div>
               <div className="flex gap-4">
                 {socialLinks.map((social) => (
-                  <a
+                  <motion.a
                     key={social.label}
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-14 h-14 flex items-center justify-center transition-all duration-200 hover:scale-110 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-darker-bg"
+                    className="w-14 h-14 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-darker-bg"
                     style={{
                       border: "1px solid oklch(0.35 0.02 280)",
                       color: "oklch(0.65 0.02 280)",
                     }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLAnchorElement).style.color =
-                        social.color;
-                      (e.currentTarget as HTMLAnchorElement).style.borderColor =
-                        social.color;
-                      (e.currentTarget as HTMLAnchorElement).style.background =
-                        social.hoverBg;
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLAnchorElement).style.color =
-                        "oklch(0.65 0.02 280)";
-                      (e.currentTarget as HTMLAnchorElement).style.borderColor =
-                        "oklch(0.35 0.02 280)";
-                      (e.currentTarget as HTMLAnchorElement).style.background =
-                        "transparent";
+                    whileHover={{
+                      scale: 1.15,
+                      color: social.color,
+                      borderColor: social.color,
+                      background: social.hoverBg,
+                      boxShadow: `0 0 16px ${social.color}60`,
+                      transition: { duration: 0.2 },
                     }}
                     aria-label={social.label}
                   >
                     <social.icon className="w-5 h-5" aria-hidden="true" />
-                  </a>
+                  </motion.a>
                 ))}
               </div>
             </div>
@@ -200,6 +238,7 @@ export default function ContactSection() {
                   border: "1px solid oklch(0.58 0.26 340 / 0.3)",
                   backdropFilter: "blur(8px)",
                 }}
+                data-ocid="contact.success_state"
               >
                 <CheckCircle
                   className="w-16 h-16 mb-6"
@@ -212,17 +251,22 @@ export default function ContactSection() {
                 <p className="font-syne text-near-white/60 mb-6">
                   I'll get back to you as soon as possible.
                 </p>
-                <button
+                <motion.button
                   type="button"
                   onClick={() => setSubmitted(false)}
-                  className="font-syne text-sm tracking-widest uppercase px-6 py-3 transition-all duration-200 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  className="font-syne text-sm tracking-widest uppercase px-6 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                   style={{
                     border: "1px solid oklch(0.58 0.26 340 / 0.5)",
                     color: "oklch(0.72 0.22 320)",
                   }}
+                  whileHover={{
+                    scale: 1.02,
+                    boxShadow: "0 0 20px oklch(0.58 0.26 340 / 0.3)",
+                    transition: { duration: 0.2 },
+                  }}
                 >
                   Send Another
-                </button>
+                </motion.button>
               </div>
             ) : (
               <form
@@ -256,6 +300,7 @@ export default function ContactSection() {
                       borderBottomColor: "oklch(0.35 0.02 280)",
                       color: "oklch(0.97 0.01 60)",
                     }}
+                    data-ocid="contact.input"
                   />
                 </div>
 
@@ -280,6 +325,7 @@ export default function ContactSection() {
                       borderBottomColor: "oklch(0.35 0.02 280)",
                       color: "oklch(0.97 0.01 60)",
                     }}
+                    data-ocid="contact.input"
                   />
                 </div>
 
@@ -303,19 +349,31 @@ export default function ContactSection() {
                       borderColor: "oklch(0.35 0.02 280)",
                       color: "oklch(0.97 0.01 60)",
                     }}
+                    data-ocid="contact.textarea"
                   />
                 </div>
 
-                <button
+                <motion.button
                   type="submit"
                   disabled={isPending}
-                  className="w-full flex items-center justify-center gap-3 font-syne font-semibold tracking-widest uppercase text-sm py-4 text-white transition-all duration-300 hover:opacity-90 hover:scale-[1.01] disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-darker-bg"
+                  className="w-full flex items-center justify-center gap-3 font-syne font-semibold tracking-widest uppercase text-sm py-4 text-white disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-darker-bg"
                   style={{
                     background: isPending
                       ? "oklch(0.35 0.02 280)"
                       : "linear-gradient(135deg, oklch(0.58 0.26 340), oklch(0.42 0.16 345))",
                   }}
+                  whileHover={
+                    !isPending
+                      ? {
+                          scale: 1.01,
+                          boxShadow: "0 0 30px oklch(0.58 0.26 340 / 0.5)",
+                          transition: { duration: 0.2 },
+                        }
+                      : {}
+                  }
+                  whileTap={{ scale: 0.99 }}
                   aria-label={isPending ? "Sending message..." : "Send message"}
+                  data-ocid="contact.submit_button"
                 >
                   {isPending ? (
                     <>
@@ -331,7 +389,7 @@ export default function ContactSection() {
                       Send Message
                     </>
                   )}
-                </button>
+                </motion.button>
               </form>
             )}
           </div>

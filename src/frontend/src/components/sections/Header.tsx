@@ -1,10 +1,11 @@
-import { Menu, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { X } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 
 function scrollTo(id: string) {
   const el = document.getElementById(id);
   if (!el) return;
-  const top = el.getBoundingClientRect().top + window.scrollY - 72;
+  const top = el.getBoundingClientRect().top + window.scrollY - 40;
   window.scrollTo({ top, behavior: "smooth" });
 }
 
@@ -26,17 +27,29 @@ const allSectionIds = [
 ];
 
 export default function Header() {
-  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
+  const menuBtnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    if (!menuOpen) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setMenuOpen(false);
+        menuBtnRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [menuOpen]);
 
-  // IntersectionObserver for active section tracking
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
+
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
     for (const id of allSectionIds) {
@@ -44,9 +57,7 @@ export default function Header() {
       if (!el) continue;
       const obs = new IntersectionObserver(
         ([entry]) => {
-          if (entry.isIntersecting) {
-            setActiveSection(id);
-          }
+          if (entry.isIntersecting) setActiveSection(id);
         },
         { threshold: 0.3, rootMargin: "-80px 0px -40% 0px" },
       );
@@ -59,126 +70,232 @@ export default function Header() {
   }, []);
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-darker-bg/90 backdrop-blur-md border-b border-primary/10 shadow-lg"
-          : "bg-transparent"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Logo */}
+    <>
+      {/* ── MOBILE HAMBURGER ── */}
+      <div className="md:hidden fixed top-4 left-4 z-50">
         <button
+          ref={menuBtnRef}
           type="button"
-          onClick={() => scrollTo("hero")}
-          className="flex items-center gap-3 hover:opacity-90 transition-opacity group/logo"
-          aria-label="Go to top"
-          data-ocid="nav.link"
-        >
-          <div className="relative">
-            <img
-              src="/assets/generated/shahed-logo-transparent.dim_200x200.png"
-              alt="Shahed logo"
-              className="h-10 w-10 object-contain relative z-10 transition-all duration-300 group-hover/logo:drop-shadow-[0_0_12px_oklch(0.58_0.26_340)]"
-            />
-            <div
-              className="absolute inset-0 rounded-full opacity-0 group-hover/logo:opacity-100 transition-opacity duration-400 blur-md -z-0"
-              style={{ background: "oklch(0.58 0.26 340 / 0.5)" }}
-              aria-hidden="true"
-            />
-          </div>
-          <span className="font-playfair text-xl text-near-white hidden sm:block tracking-wide">
-            Shahed
-          </span>
-        </button>
-
-        {/* Desktop Nav */}
-        <nav
-          className="hidden md:flex items-center gap-8"
-          aria-label="Main navigation"
-        >
-          {navLinks.map((link) => {
-            const isActive = activeSection === link.anchor;
-            return (
-              <button
-                key={link.anchor}
-                type="button"
-                onClick={() => scrollTo(link.anchor)}
-                className="font-syne text-sm tracking-[0.15em] uppercase transition-colors duration-200 relative group"
-                style={{
-                  color: isActive
-                    ? "oklch(0.72 0.22 320)"
-                    : "oklch(0.97 0.01 60 / 0.7)",
-                }}
-                data-ocid="nav.link"
-              >
-                {link.label}
-                {/* Active indicator */}
-                <span
-                  className="absolute -bottom-1 left-0 h-px transition-all duration-300"
-                  style={{
-                    width: isActive ? "100%" : "0%",
-                    background:
-                      "linear-gradient(90deg, oklch(0.58 0.26 340), oklch(0.72 0.22 320))",
-                    boxShadow: isActive
-                      ? "0 0 6px oklch(0.58 0.26 340 / 0.8)"
-                      : "none",
-                  }}
-                />
-                {/* Hover fallback for non-active */}
-                {!isActive && (
-                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-primary transition-all duration-300 group-hover:w-full" />
-                )}
-              </button>
-            );
-          })}
-        </nav>
-
-        {/* Mobile menu toggle */}
-        <button
-          type="button"
-          className="md:hidden text-near-white/80 hover:text-primary transition-colors p-2"
+          className="flex items-center justify-center w-11 h-11 rounded-full border border-fuchsia-500/25 transition-all duration-200 hover:border-fuchsia-500/50"
+          style={{
+            background: "oklch(0.10 0.025 280 / 0.85)",
+            backdropFilter: "blur(16px)",
+            boxShadow: "0 4px 24px oklch(0.08 0.01 280 / 0.5)",
+          }}
           onClick={() => setMenuOpen((v) => !v)}
-          aria-label="Toggle menu"
+          aria-label="Open menu"
           aria-expanded={menuOpen}
+          aria-controls="mobile-nav"
           data-ocid="nav.toggle"
         >
-          {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            aria-hidden="true"
+          >
+            <rect
+              x="3"
+              y="5"
+              width="14"
+              height="1.5"
+              rx="1"
+              fill="oklch(0.97 0.01 60 / 0.85)"
+            />
+            <rect
+              x="3"
+              y="9.25"
+              width="10"
+              height="1.5"
+              rx="1"
+              fill="oklch(0.78 0.22 320)"
+            />
+            <rect
+              x="3"
+              y="13.5"
+              width="14"
+              height="1.5"
+              rx="1"
+              fill="oklch(0.97 0.01 60 / 0.85)"
+            />
+          </svg>
         </button>
       </div>
 
-      {/* Mobile Nav */}
-      {menuOpen && (
-        <div className="md:hidden bg-darker-bg/95 backdrop-blur-md border-t border-primary/10">
-          <nav
-            className="flex flex-col py-4 px-6 gap-1"
-            aria-label="Mobile navigation"
-          >
-            {navLinks.map((link) => {
-              const isActive = activeSection === link.anchor;
-              return (
+      {/* ── MOBILE FULL-SCREEN OVERLAY ── */}
+      <AnimatePresence>
+        {menuOpen && (
+          <>
+            <motion.div
+              key="menu-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="fixed inset-0 z-[55]"
+              style={{ background: "oklch(0.06 0.02 280 / 0.65)" }}
+              onClick={() => setMenuOpen(false)}
+              aria-hidden="true"
+            />
+
+            <motion.div
+              key="mobile-nav"
+              id="mobile-nav"
+              aria-label="Navigation menu"
+              initial={{ x: "100%" }}
+              animate={{ x: "0%" }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", stiffness: 340, damping: 36 }}
+              className="fixed top-0 right-0 bottom-0 z-[56] w-full max-w-sm flex flex-col overflow-hidden"
+              style={{ background: "oklch(0.09 0.025 280)" }}
+            >
+              {/* Blobs */}
+              <div
+                className="absolute inset-0 pointer-events-none overflow-hidden"
+                aria-hidden="true"
+              >
+                <motion.div
+                  className="absolute -top-20 -right-20 w-64 h-64 rounded-full blur-[80px]"
+                  style={{ background: "oklch(0.42 0.24 340 / 0.3)" }}
+                  animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.45, 0.3] }}
+                  transition={{
+                    duration: 4,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: "easeInOut",
+                  }}
+                />
+                <motion.div
+                  className="absolute bottom-20 -left-20 w-48 h-48 rounded-full blur-[60px]"
+                  style={{ background: "oklch(0.38 0.22 310 / 0.25)" }}
+                  animate={{ scale: [1, 1.2, 1], opacity: [0.25, 0.4, 0.25] }}
+                  transition={{
+                    duration: 5,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: "easeInOut",
+                    delay: 1,
+                  }}
+                />
+              </div>
+
+              {/* Header row */}
+              <div className="relative flex items-center justify-between px-8 pt-8 pb-6">
                 <button
-                  key={link.anchor}
                   type="button"
                   onClick={() => {
-                    scrollTo(link.anchor);
+                    scrollTo("hero");
                     setMenuOpen(false);
                   }}
-                  className="font-syne text-sm tracking-[0.15em] uppercase transition-colors duration-200 text-left py-3 px-2 border-b border-primary/5 last:border-0"
-                  style={{
-                    color: isActive
-                      ? "oklch(0.72 0.22 320)"
-                      : "oklch(0.97 0.01 60 / 0.7)",
-                  }}
+                  className="flex items-center gap-2"
                   data-ocid="nav.link"
                 >
-                  {link.label}
+                  <img
+                    src="/assets/generated/shahed-logo-transparent.dim_200x200.png"
+                    alt="Shahed logo"
+                    className="h-8 w-8 object-contain"
+                  />
+                  <span
+                    className="font-playfair text-lg tracking-wide"
+                    style={{ color: "oklch(0.97 0.01 60)" }}
+                  >
+                    Shahed
+                  </span>
                 </button>
-              );
-            })}
-          </nav>
-        </div>
-      )}
-    </header>
+                <button
+                  type="button"
+                  onClick={() => setMenuOpen(false)}
+                  className="flex items-center justify-center w-9 h-9 rounded-full border border-fuchsia-500/25 hover:border-fuchsia-500/50 transition-colors"
+                  style={{ background: "oklch(0.14 0.03 280 / 0.8)" }}
+                  aria-label="Close menu"
+                  data-ocid="nav.close_button"
+                >
+                  <X
+                    className="w-4 h-4"
+                    style={{ color: "oklch(0.78 0.22 320)" }}
+                  />
+                </button>
+              </div>
+
+              {/* Nav links */}
+              <nav
+                className="relative flex-1 flex flex-col justify-center px-8 gap-2"
+                aria-label="Mobile navigation"
+              >
+                {navLinks.map((link, i) => {
+                  const isActive = activeSection === link.anchor;
+                  const num = String(i + 1).padStart(2, "0");
+                  return (
+                    <motion.button
+                      key={link.anchor}
+                      type="button"
+                      initial={{ opacity: 0, x: 40 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 40 }}
+                      transition={{
+                        duration: 0.35,
+                        delay: 0.1 + i * 0.1,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      onClick={() => {
+                        scrollTo(link.anchor);
+                        setMenuOpen(false);
+                      }}
+                      className="group/mobilelink relative flex items-baseline gap-4 py-4 text-left border-b last:border-0"
+                      style={{ borderColor: "oklch(0.58 0.26 340 / 0.1)" }}
+                      data-ocid="nav.link"
+                    >
+                      <span
+                        className="font-mono text-xs shrink-0 transition-colors duration-200"
+                        style={{
+                          color: isActive
+                            ? "oklch(0.78 0.22 320)"
+                            : "oklch(0.58 0.26 340 / 0.5)",
+                        }}
+                      >
+                        {num} /
+                      </span>
+                      <span
+                        className="font-syne text-3xl font-bold uppercase tracking-[0.06em] transition-all duration-300 group-hover/mobilelink:translate-x-2"
+                        style={{
+                          color: isActive
+                            ? "oklch(0.88 0.20 320)"
+                            : "oklch(0.93 0.01 60 / 0.85)",
+                          textShadow: isActive
+                            ? "0 0 24px oklch(0.58 0.26 340 / 0.5)"
+                            : "none",
+                        }}
+                      >
+                        {link.label}
+                      </span>
+                      {isActive && (
+                        <motion.span
+                          layoutId="mobile-active-dot"
+                          className="ml-auto w-2 h-2 rounded-full shrink-0 self-center"
+                          style={{
+                            background: "oklch(0.58 0.26 340)",
+                            boxShadow:
+                              "0 0 8px oklch(0.58 0.26 340 / 0.9), 0 0 20px oklch(0.58 0.26 340 / 0.4)",
+                          }}
+                        />
+                      )}
+                    </motion.button>
+                  );
+                })}
+              </nav>
+
+              {/* Footer hint */}
+              <div className="relative px-8 pb-10 pt-4">
+                <p
+                  className="font-mono text-xs tracking-widest"
+                  style={{ color: "oklch(0.55 0.08 280 / 0.6)" }}
+                >
+                  SHAHED · PORTFOLIO
+                </p>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

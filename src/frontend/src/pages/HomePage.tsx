@@ -1,4 +1,3 @@
-import BackToTop from "../components/BackToTop";
 import MarqueeTicker from "../components/MarqueeTicker";
 import AboutSection from "../components/sections/AboutSection";
 import AwardsSection from "../components/sections/AwardsSection";
@@ -27,7 +26,6 @@ export default function HomePage() {
         <ContactSection />
       </main>
       <Footer />
-      <BackToTop />
     </div>
   );
 }
