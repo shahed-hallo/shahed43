@@ -8,35 +8,35 @@ const testimonials = [
     name: "Ratul",
     avatar: "/assets/generated/avatar-ratul.dim_120x120.jpg",
     quote:
-      "Genzthepixel completely changed how I approach math problems. It's like having a genius friend available 24/7.",
+      "BecatTech completely changed how I approach search. It's like having a genius friend available 24/7.",
     role: "Student",
   },
   {
     name: "Tarek",
     avatar: "/assets/generated/avatar-tarek.dim_120x120.jpg",
     quote:
-      "I used to struggle with complex equations. Now I solve them with confidence thanks to Shahed's tool.",
+      "I used to struggle finding reliable information. Now I search with confidence thanks to Shahed's tool.",
     role: "Student",
   },
   {
     name: "Jerin",
     avatar: "/assets/generated/avatar-jerin.dim_120x120.jpg",
     quote:
-      "The AI math tool is incredible. It explains concepts in a way that finally makes sense to me.",
+      "The search engine is incredible. It finds results in a way that finally makes sense to me.",
     role: "Student",
   },
   {
     name: "Saifa",
     avatar: "/assets/generated/avatar-saifa.dim_120x120.jpg",
     quote:
-      "As a student, Genzthepixel has been a game-changer. Shahed built something truly special for our community.",
+      "As a student, BecatTech has been a game-changer. Shahed built something truly special for our community.",
     role: "Student",
   },
   {
     name: "Hasan",
     avatar: "/assets/generated/avatar-hasan.dim_120x120.jpg",
     quote:
-      "I've never seen a local developer create something so impactful. Genzthepixel is revolutionary.",
+      "I've never seen a local developer create something so impactful. BecatTech is revolutionary.",
     role: "Community Member",
   },
 ];
@@ -97,7 +97,6 @@ export default function TestimonialsSection() {
   const handleDotClick = (i: number) => {
     stopAutoPlay();
     goTo(i);
-    // Spawn particle burst
     const particles = Array.from({ length: 6 }, (_, pid) => ({
       id: pid,
       dx: Math.cos((pid / 6) * Math.PI * 2) * (20 + Math.random() * 12),
@@ -195,7 +194,7 @@ export default function TestimonialsSection() {
           >
             What They Say About
             <br />
-            <em className="text-gradient-pink not-italic">Genzthepixel</em>
+            <em className="text-gradient-pink not-italic">BecatTech</em>
           </motion.h2>
         </div>
 
@@ -209,7 +208,7 @@ export default function TestimonialsSection() {
           aria-roledescription="carousel"
         >
           <motion.div
-            className="relative p-10 md:p-14 transition-opacity duration-300"
+            className="relative p-8 md:p-14 transition-opacity duration-300"
             style={{
               background: "oklch(0.15 0.01 280)",
               border: blockquoteHovered
@@ -394,60 +393,6 @@ export default function TestimonialsSection() {
             </div>
           </div>
         </section>
-
-        {/* All testimonials mini-grid */}
-        <div
-          className={`mt-16 grid grid-cols-2 md:grid-cols-5 gap-3 transition-all duration-700 delay-400 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          {testimonials.map((t, i) => (
-            <motion.button
-              key={t.name}
-              type="button"
-              onClick={() => {
-                stopAutoPlay();
-                goTo(i);
-              }}
-              className={`p-3 text-center transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary ${
-                i === active ? "scale-[1.02]" : "opacity-60 hover:opacity-80"
-              }`}
-              style={{
-                background:
-                  i === active
-                    ? "oklch(0.58 0.26 340 / 0.1)"
-                    : "oklch(0.15 0.01 280)",
-                border: `1px solid ${i === active ? "oklch(0.58 0.26 340 / 0.4)" : "oklch(0.22 0.02 280)"}`,
-              }}
-              whileHover={{
-                scale: 1.05,
-                boxShadow: "0 0 16px oklch(0.58 0.26 340 / 0.2)",
-                borderColor: "oklch(0.58 0.26 340 / 0.4)",
-                transition: { duration: 0.2 },
-              }}
-              aria-label={`View testimonial from ${t.name}`}
-              data-ocid={`testimonials.item.${i + 1}`}
-            >
-              <img
-                src={t.avatar}
-                alt={t.name}
-                className="w-8 h-8 rounded-full object-cover mx-auto mb-2"
-                style={{
-                  border:
-                    i === active
-                      ? "1px solid oklch(0.58 0.26 340)"
-                      : "1px solid transparent",
-                }}
-              />
-              <p
-                className="font-syne text-xs"
-                style={{ color: "oklch(0.92 0.02 60)" }}
-              >
-                {t.name}
-              </p>
-            </motion.button>
-          ))}
-        </div>
       </div>
     </section>
   );

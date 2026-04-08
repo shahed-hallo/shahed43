@@ -101,13 +101,16 @@ export default function RightProgressBar() {
           style={{ marginTop: "-8px" }}
         >
           <motion.img
-            src="/assets/generated/shahed-logo-transparent.dim_200x200.png"
+            src="/assets/uploads/shahed-logo-photo.png"
             alt="Shahed logo"
-            className="w-8 h-8 object-contain"
-            whileHover={{ scale: 1.15, filter: "brightness(1.3)" }}
+            className="w-8 h-8 object-cover"
+            whileHover={{ scale: 1.15 }}
             transition={{ duration: 0.2 }}
             style={{
-              filter: "drop-shadow(0 0 6px oklch(0.58 0.26 340 / 0.5))",
+              borderRadius: "50%",
+              boxShadow:
+                "0 0 10px oklch(0.58 0.26 340 / 0.6), 0 0 20px oklch(0.58 0.26 340 / 0.3)",
+              border: "2px solid oklch(0.58 0.26 340 / 0.5)",
             }}
           />
         </button>

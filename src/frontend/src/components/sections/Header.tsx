@@ -190,9 +190,14 @@ export default function Header() {
                   data-ocid="nav.link"
                 >
                   <img
-                    src="/assets/generated/shahed-logo-transparent.dim_200x200.png"
+                    src="/assets/uploads/shahed-logo-photo.png"
                     alt="Shahed logo"
-                    className="h-8 w-8 object-contain"
+                    className="h-8 w-8 object-cover"
+                    style={{
+                      borderRadius: "50%",
+                      border: "2px solid oklch(0.58 0.26 340 / 0.5)",
+                      boxShadow: "0 0 10px oklch(0.58 0.26 340 / 0.5)",
+                    }}
                   />
                   <span
                     className="font-playfair text-lg tracking-wide"

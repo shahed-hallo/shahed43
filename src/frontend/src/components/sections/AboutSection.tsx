@@ -34,7 +34,7 @@ const statCards = [
   {
     icon: Code2,
     label: "Languages",
-    value: "C / ASM",
+    value: "8+",
     desc: "Core expertise",
   },
   {
@@ -114,7 +114,7 @@ export default function AboutSection() {
     <section
       id="about"
       ref={sectionRef as React.RefObject<HTMLElement>}
-      className="relative py-32 overflow-hidden"
+      className="relative py-24 md:py-32 overflow-hidden"
       style={{ background: "oklch(0.13 0.01 280)" }}
       aria-labelledby="about-heading"
       onMouseMove={handleMouseMove}
@@ -167,7 +167,7 @@ export default function AboutSection() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-start">
           {/* Left: Text */}
           <div
             className={`transition-all duration-800 ${
@@ -218,21 +218,57 @@ export default function AboutSection() {
               ))}
             </div>
 
-            {/* Mission callout with animated border */}
-            <motion.div
-              className="animated-border mt-10"
-              whileHover={{
-                scale: 1.01,
-                transition: { duration: 0.2, ease: [0.22, 1, 0.36, 1] },
-              }}
-            >
+            {/* Mission callout — charged energy animation */}
+            <div className="mt-10 relative">
+              {/* Rotating conic border */}
               <div
-                className="p-6 relative cursor-default"
+                className="absolute -inset-[2px] rounded-sm"
+                style={{
+                  background:
+                    "conic-gradient(from var(--mission-angle, 0deg), oklch(0.58 0.26 340), oklch(0.72 0.22 320), oklch(0.42 0.16 345), oklch(0.78 0.22 310), oklch(0.58 0.26 340))",
+                  animation: "mission-spin 3s linear infinite",
+                }}
+                aria-hidden="true"
+              />
+              <motion.div
+                className="relative cursor-default"
                 style={{
                   borderLeft: "3px solid oklch(0.58 0.26 340)",
-                  background: "oklch(0.58 0.26 340 / 0.06)",
+                  background: "oklch(0.10 0.01 280)",
+                  padding: "24px",
+                }}
+                whileHover={{
+                  scale: 1.01,
+                  transition: { duration: 0.2, ease: [0.22, 1, 0.36, 1] },
                 }}
               >
+                {/* Pink energy lines */}
+                <div
+                  className="absolute inset-0 overflow-hidden pointer-events-none"
+                  aria-hidden="true"
+                >
+                  <div
+                    className="absolute h-px w-0"
+                    style={{
+                      top: "30%",
+                      left: 0,
+                      background:
+                        "linear-gradient(90deg, oklch(0.58 0.26 340), oklch(0.72 0.22 320 / 0))",
+                      animation: "energy-shoot 2s ease-in-out infinite",
+                    }}
+                  />
+                  <div
+                    className="absolute h-px w-0"
+                    style={{
+                      top: "70%",
+                      right: 0,
+                      background:
+                        "linear-gradient(270deg, oklch(0.72 0.22 320), oklch(0.58 0.26 340 / 0))",
+                      animation: "energy-shoot 2s ease-in-out infinite 1s",
+                    }}
+                  />
+                </div>
+
                 <p
                   className="font-syne text-xs tracking-[0.3em] uppercase mb-2"
                   style={{ color: "oklch(0.72 0.22 320)" }}
@@ -241,21 +277,25 @@ export default function AboutSection() {
                 </p>
                 <motion.p
                   className="font-playfair text-2xl text-near-white italic"
+                  style={{
+                    animation: "mission-glow-pulse 2.5s ease-in-out infinite",
+                  }}
                   whileHover={{
-                    textShadow: "0 0 20px oklch(0.78 0.22 320 / 0.5)",
+                    textShadow: "0 0 30px oklch(0.78 0.22 320 / 0.8)",
                     letterSpacing: "0.01em",
                     transition: { duration: 0.2 },
                   }}
                 >
                   "100% Accurate Physics in Gaming"
                 </motion.p>
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
 
             {/* Download CV */}
             <motion.a
-              href="/assets/shahed-cv.pdf"
-              download
+              href="/assets/shahed-cv.html"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-3 mt-10 px-8 py-4 font-syne font-semibold text-sm tracking-widest uppercase text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               style={{
                 background:
@@ -390,6 +430,28 @@ export default function AboutSection() {
           </div>
         </div>
       </div>
+
+      {/* Mission animation keyframes injected inline */}
+      <style>{`
+        @keyframes mission-spin {
+          from { --mission-angle: 0deg; }
+          to { --mission-angle: 360deg; }
+        }
+        @property --mission-angle {
+          syntax: '<angle>';
+          inherits: false;
+          initial-value: 0deg;
+        }
+        @keyframes mission-glow-pulse {
+          0%, 100% { text-shadow: 0 0 10px oklch(0.58 0.26 340 / 0.4), 0 0 30px oklch(0.58 0.26 340 / 0.2); }
+          50% { text-shadow: 0 0 20px oklch(0.72 0.22 320 / 0.8), 0 0 50px oklch(0.58 0.26 340 / 0.5); }
+        }
+        @keyframes energy-shoot {
+          0% { width: 0; opacity: 0.8; }
+          60% { width: 80%; opacity: 0.6; }
+          100% { width: 100%; opacity: 0; }
+        }
+      `}</style>
     </section>
   );
 }

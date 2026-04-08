@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shahed — Curriculum Vitae</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --pink: oklch(0.58 0.26 340);
+      --pink-light: oklch(0.72 0.22 320);
+      --dark: oklch(0.09 0.01 280);
+      --dark-card: oklch(0.13 0.01 280);
+      --near-white: oklch(0.97 0.01 60);
+      --muted: oklch(0.65 0.02 280);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--dark);
+      color: var(--near-white);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .cv-wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--dark-card);
+      border: 1px solid oklch(0.25 0.02 340);
+      box-shadow: 0 0 60px oklch(0.58 0.26 340 / 0.15);
+      overflow: hidden;
+    }
+
+    /* Header */
+    .cv-header {
+      background: linear-gradient(135deg, oklch(0.09 0.01 280), oklch(0.15 0.02 340));
+      border-bottom: 3px solid oklch(0.58 0.26 340);
+      padding: 48px 48px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cv-header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, oklch(0.58 0.26 340 / 0.12), transparent);
+      pointer-events: none;
+    }
+    .cv-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, oklch(0.58 0.26 340), oklch(0.72 0.22 320), transparent);
+    }
+    .cv-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 52px;
+      font-weight: 700;
+      color: var(--near-white);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .cv-title {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 20px;
+      color: oklch(0.72 0.22 320);
+      margin-bottom: 24px;
+    }
+    .cv-contacts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .cv-contact-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+    .cv-contact-item a {
+      color: oklch(0.72 0.22 320);
+      text-decoration: none;
+    }
+    .cv-contact-item a:hover { text-decoration: underline; }
+    .cv-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: oklch(0.58 0.26 340);
+      flex-shrink: 0;
+    }
+
+    /* Body */
+    .cv-body {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 0;
+    }
+
+    .cv-main {
+      padding: 40px 48px;
+      border-right: 1px solid oklch(0.22 0.02 280);
+    }
+
+    .cv-sidebar {
+      padding: 40px 32px;
+      background: oklch(0.10 0.01 280);
+    }
+
+    /* Section */
+    .cv-section { margin-bottom: 36px; }
+    .cv-section:last-child { margin-bottom: 0; }
+    .cv-section-label {
+      font-size: 10px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: oklch(0.58 0.26 340);
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid oklch(0.58 0.26 340 / 0.2);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .cv-section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: oklch(0.58 0.26 340 / 0.2);
+    }
+
+    /* Project card */
+    .cv-project {
+      margin-bottom: 20px;
+      padding: 16px;
+      border-left: 3px solid oklch(0.58 0.26 340 / 0.6);
+      background: oklch(0.11 0.01 280);
+    }
+    .cv-project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+    .cv-project-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      color: var(--near-white);
+    }
+    .cv-project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .cv-tag {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border: 1px solid oklch(0.58 0.26 340 / 0.4);
+      color: oklch(0.72 0.22 320);
+    }
+    .cv-project-desc {
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* Education */
+    .cv-edu-item {
+      margin-bottom: 16px;
+    }
+    .cv-edu-degree {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      color: var(--near-white);
+    }
+    .cv-edu-meta {
+      font-size: 11px;
+      color: oklch(0.72 0.22 320);
+      letter-spacing: 0.08em;
+      margin-top: 2px;
+    }
+    .cv-edu-detail {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* Skill bars */
+    .cv-skill-item { margin-bottom: 14px; }
+    .cv-skill-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+    .cv-skill-name {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--near-white);
+    }
+    .cv-skill-pct {
+      font-size: 10px;
+      color: oklch(0.58 0.26 340);
+    }
+    .cv-skill-bar {
+      height: 3px;
+      background: oklch(0.22 0.02 280);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .cv-skill-fill {
+      height: 100%;
+      background: linear-gradient(90deg, oklch(0.58 0.26 340), oklch(0.72 0.22 320));
+      border-radius: 2px;
+    }
+
+    /* Interest card */
+    .cv-interest {
+      padding: 12px;
+      background: oklch(0.13 0.01 280);
+      border: 1px solid oklch(0.22 0.02 280);
+      margin-bottom: 10px;
+    }
+    .cv-interest-title {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      color: oklch(0.72 0.22 320);
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+    .cv-interest-desc {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* Footer */
+    .cv-footer {
+      padding: 20px 48px;
+      border-top: 1px solid oklch(0.22 0.02 280);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: oklch(0.08 0.01 280);
+    }
+    .cv-footer-text {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: oklch(0.35 0.02 280);
+    }
+    .cv-footer-brand {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 13px;
+      color: oklch(0.58 0.26 340);
+    }
+
+    /* Print */
+    @media print {
+      body { background: white; padding: 0; }
+      .cv-wrapper {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        max-width: 100%;
+      }
+      .cv-header { background: #1a0a1e !important; }
+      .cv-main, .cv-sidebar, .cv-body { background: #fff !important; color: #111 !important; }
+    }
+
+    @media (max-width: 680px) {
+      .cv-body { grid-template-columns: 1fr; }
+      .cv-sidebar { border-top: 1px solid oklch(0.22 0.02 280); }
+      .cv-main { border-right: none; padding: 32px 24px; }
+      .cv-header { padding: 32px 24px; }
+      .cv-name { font-size: 36px; }
+      .cv-footer { padding: 16px 24px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="cv-wrapper">
+    <!-- Header -->
+    <header class="cv-header">
+      <p class="cv-name">Shahed</p>
+      <p class="cv-title">Junior Programmer &amp; Fashionista</p>
+      <div class="cv-contacts">
+        <div class="cv-contact-item">
+          <div class="cv-dot"></div>
+          <a href="https://www.youtube.com/@genzthepixel" target="_blank">YouTube: @genzthepixel</a>
+        </div>
+        <div class="cv-contact-item">
+          <div class="cv-dot"></div>
+          <a href="https://linkedin.com/in/genzthepixel" target="_blank">LinkedIn: genzthepixel</a>
+        </div>
+        <div class="cv-contact-item">
+          <div class="cv-dot"></div>
+          <a href="https://x.com/genzthepixel" target="_blank">X: @genzthepixel</a>
+        </div>
+        <div class="cv-contact-item">
+          <div class="cv-dot"></div>
+          <a href="https://becat.tech/" target="_blank">becat.tech</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Body -->
+    <div class="cv-body">
+      <!-- Main column -->
+      <main class="cv-main">
+
+        <!-- Summary -->
+        <section class="cv-section">
+          <p class="cv-section-label">Profile</p>
+          <p style="font-size:13px; line-height:1.7; color: oklch(0.80 0.02 280);">
+            A passionate junior programmer driven by precision and creativity. 
+            Started coding in Class 9 with C, developing a deep obsession with 
+            physics simulation — building systems that model real-world phenomena 
+            with 100% mathematical accuracy. Creator of BecatTech, a privacy-first 
+            API search engine. Programming is not just a skill — it's art.
+          </p>
+        </section>
+
+        <!-- Projects -->
+        <section class="cv-section">
+          <p class="cv-section-label">Projects</p>
+
+          <div class="cv-project">
+            <div class="cv-project-header">
+              <p class="cv-project-title">Wind Physics in Gaming</p>
+              <div class="cv-project-tags">
+                <span class="cv-tag">C</span>
+                <span class="cv-tag">Physics</span>
+              </div>
+            </div>
+            <p class="cv-project-desc">
+              A custom wind simulation engine in pure C. Models turbulent airflow, drag 
+              coefficients, and density variations to produce 100% accurate game physics. 
+              Implements Navier-Stokes approximations for real-time performance.
+            </p>
+          </div>
+
+          <div class="cv-project">
+            <div class="cv-project-header">
+              <p class="cv-project-title">Large-Scale Numerical Computation</p>
+              <div class="cv-project-tags">
+                <span class="cv-tag">Python</span>
+                <span class="cv-tag">Java</span>
+                <span class="cv-tag">Math</span>
+              </div>
+            </div>
+            <p class="cv-project-desc">
+              Solving massive numerical problems — N-body gravitational simulations, 
+              Poisson equation solvers, and field calculations — using optimized algorithms 
+              in Python and Java. Built for precision at scale with 64-bit floating point.
+            </p>
+          </div>
+
+          <div class="cv-project" style="border-left-color: oklch(0.72 0.22 320 / 0.6);">
+            <div class="cv-project-header">
+              <p class="cv-project-title">BecatTech — API Search Engine</p>
+              <div class="cv-project-tags">
+                <span class="cv-tag">HTML</span>
+                <span class="cv-tag">CSS</span>
+                <span class="cv-tag">JS</span>
+                <span class="cv-tag">API</span>
+              </div>
+            </div>
+            <p class="cv-project-desc">
+              Founded and built BecatTech (becat.tech) — an API-powered search engine 
+              designed as a DuckDuckGo alternative. Delivers fast, private search results 
+              through a clean, modern interface. Served 90% of the local community.
+            </p>
+          </div>
+        </section>
+
+        <!-- Education -->
+        <section class="cv-section">
+          <p class="cv-section-label">Education</p>
+
+          <div class="cv-edu-item">
+            <p class="cv-edu-degree">Higher Secondary Certificate (HSC)</p>
+            <p class="cv-edu-meta">Class 11 · Currently Enrolled · Science</p>
+            <p class="cv-edu-detail">Continuing studies with a focus on Physics, Mathematics, and Computer Science fundamentals.</p>
+          </div>
+
+          <div class="cv-edu-item">
+            <p class="cv-edu-degree">Secondary School Certificate (SSC)</p>
+            <p class="cv-edu-meta">Science · GPA 4.33 · 2023</p>
+            <p class="cv-edu-detail">Graduated with a strong foundation in Physics and Mathematics, sparking a deep interest in computational simulation.</p>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- Sidebar -->
+      <aside class="cv-sidebar">
+
+        <!-- Skills -->
+        <section class="cv-section">
+          <p class="cv-section-label">Skills</p>
+
+          <div class="cv-skill-item">
+            <div class="cv-skill-header">
+              <span class="cv-skill-name">Python</span>
+              <span class="cv-skill-pct">90%</span>
+            </div>
+            <div class="cv-skill-bar"><div class="cv-skill-fill" style="width:90%"></div></div>
+          </div>
+          <div class="cv-skill-item">
+            <div class="cv-skill-header">
+              <span class="cv-skill-name">HTML</span>
+              <span class="cv-skill-pct">95%</span>
+            </div>
+            <div class="cv-skill-bar"><div class="cv-skill-fill" style="width:95%"></div></div>
+          </div>
+          <div class="cv-skill-item">
+            <div class="cv-skill-header">
+              <span class="cv-skill-name">CSS</span>
+              <span class="cv-skill-pct">92%</span>
+            </div>
+            <div class="cv-skill-bar"><div class="cv-skill-fill" style="width:92%"></div></div>
+          </div>
+          <div class="cv-skill-item">
+            <div class="cv-skill-header">
+              <span class="cv-skill-name">JavaScript</span>
+              <span class="cv-skill-pct">92%</span>
+            </div>
+            <div class="cv-skill-bar"><div class="cv-skill-fill" style="width:92%"></div></div>
+          </div>
+          <div class="cv-skill-item">
+            <div class="cv-skill-header">
+              <span class="cv-skill-name">C#</span>
+              <span class="cv-skill-pct">85%</span>
+            </div>
+            <div class="cv-skill-bar"><div class="cv-skill-fill" style="width:85%"></div></div>
+          </div>
+          <div class="cv-skill-item">
+            <div class="cv-skill-header">
+              <span class="cv-skill-name">Java</span>
+              <span class="cv-skill-pct">80%</span>
+            </div>
+            <div class="cv-skill-bar"><div class="cv-skill-fill" style="width:80%"></div></div>
+          </div>
+          <div class="cv-skill-item">
+            <div class="cv-skill-header">
+              <span class="cv-skill-name">IDA Pro</span>
+              <span class="cv-skill-pct">70%</span>
+            </div>
+            <div class="cv-skill-bar"><div class="cv-skill-fill" style="width:70%"></div></div>
+          </div>
+          <div class="cv-skill-item">
+            <div class="cv-skill-header">
+              <span class="cv-skill-name">BecatTech / API</span>
+              <span class="cv-skill-pct" style="color:oklch(0.72 0.22 320)">Creator</span>
+            </div>
+            <div class="cv-skill-bar">
+              <div class="cv-skill-fill" style="width:100%; background:linear-gradient(90deg, oklch(0.72 0.22 320), oklch(0.58 0.26 340))"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Interests -->
+        <section class="cv-section">
+          <p class="cv-section-label">Interests</p>
+
+          <div class="cv-interest">
+            <p class="cv-interest-title">🎮 Gaming</p>
+            <p class="cv-interest-desc">PUBG Level 29 — strategy, reflexes, and competitive gameplay that mirrors analytical thinking in code.</p>
+          </div>
+
+          <div class="cv-interest">
+            <p class="cv-interest-title">🎬 Sci-Fi Cinema</p>
+            <p class="cv-interest-desc">Watched 10+ CS-related sci-fi films — from AI ethics to space computing. Cinema that inspires code.</p>
+          </div>
+
+          <div class="cv-interest">
+            <p class="cv-interest-title">👗 Fashion</p>
+            <p class="cv-interest-desc">Precision and beauty in design — the same principles that drive clean code architecture.</p>
+          </div>
+        </section>
+
+        <!-- Mission -->
+        <section class="cv-section">
+          <p class="cv-section-label">Mission</p>
+          <div style="padding:14px; border-left:3px solid oklch(0.58 0.26 340); background:oklch(0.58 0.26 340 / 0.06);">
+            <p style="font-family:'Playfair Display',serif; font-style:italic; font-size:14px; color:var(--near-white); line-height:1.5;">
+              "100% Accurate Physics in Gaming"
+            </p>
+          </div>
+        </section>
+
+      </aside>
+    </div>
+
+    <!-- Footer -->
+    <footer class="cv-footer">
+      <span class="cv-footer-text">Shahed · Portfolio · BecatTech</span>
+      <span class="cv-footer-brand">"Programming is Art."</span>
+    </footer>
+  </div>
+
+  <div style="text-align:center; margin-top:24px;">
+    <button
+      onclick="window.print()"
+      style="font-family:'Syne',sans-serif; font-size:12px; letter-spacing:0.2em; text-transform:uppercase; padding:12px 32px; background:linear-gradient(135deg,oklch(0.58 0.26 340),oklch(0.42 0.16 345)); color:white; border:none; cursor:pointer;"
+    >
+      Print / Save as PDF
+    </button>
+  </div>
+</body>
+</html>

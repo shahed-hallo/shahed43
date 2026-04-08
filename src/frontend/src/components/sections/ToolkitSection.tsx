@@ -2,75 +2,128 @@ import { motion } from "motion/react";
 import { useState } from "react";
 import { useIntersectionObserver } from "../../hooks/useIntersectionObserver";
 
-const asmSnippetFull = `<span class="asm-cm">; IDA Pro disassembly snippet</span>
-<span class="asm-kw">push</span>    <span class="asm-reg">ebp</span>
-<span class="asm-kw">mov</span>     <span class="asm-reg">ebp</span>, <span class="asm-reg">esp</span>
-<span class="asm-kw">sub</span>     <span class="asm-reg">esp</span>, <span class="asm-nu">18h</span>
-<span class="asm-kw">mov</span>     [<span class="asm-reg">ebp</span>+WindField], <span class="asm-reg">edi</span>
-<span class="asm-kw">fld</span>     <span class="asm-kw">dword</span> <span class="asm-kw">ptr</span> [<span class="asm-reg">edi</span>+velocity_x]
-<span class="asm-kw">fmul</span>    <span class="asm-kw">dword</span> <span class="asm-kw">ptr</span> [<span class="asm-reg">edi</span>+velocity_x]`;
+const pythonSnippet = `<span class="asm-cm"># Wind physics simulation (Python)</span>
+<span class="kw">import</span> <span class="ty">numpy</span> <span class="kw">as</span> <span class="fn">np</span>
 
-const skills = [
+<span class="kw">class</span> <span class="ty">WindField</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="reg">self</span>, vx: <span class="ty">float</span>, vy: <span class="ty">float</span>,
+                 density: <span class="ty">float</span>):
+        <span class="reg">self</span>.velocity = np.array([vx, vy])
+        <span class="reg">self</span>.density = density
+
+    <span class="kw">def</span> <span class="fn">compute_drag</span>(<span class="reg">self</span>, mass: <span class="ty">float</span>) -> <span class="ty">float</span>:
+        v_sq = np.dot(<span class="reg">self</span>.velocity,
+                      <span class="reg">self</span>.velocity)
+        <span class="kw">return</span> <span class="nu">0.5</span> * <span class="reg">self</span>.density * v_sq * mass`;
+
+const webSkills = [
   {
-    name: "C Language",
-    level: "Mastery Level",
-    desc: "The foundation of everything. Low-level precision.",
+    name: "HTML",
+    level: "Expert",
+    desc: "Semantic, accessible markup.",
     detail:
-      "From simple programs in Class 9 to complex physics engines today — C is Shahed's mother tongue.",
-    badge: "CORE",
-    badgeColor: "oklch(0.58 0.26 340)",
+      "Crafting clean, semantic HTML with accessibility-first practices and modern HTML5 APIs.",
+    badge: "WEB",
+    badgeColor: "oklch(0.65 0.2 25)",
     progress: 95,
   },
   {
-    name: "GCC Compiler",
+    name: "CSS",
     level: "Expert",
-    desc: "Compiling performance-critical code from scratch.",
+    desc: "Animations, layouts, design systems.",
     detail:
-      "Deep understanding of compiler flags, optimization levels, and low-level build pipelines.",
-    badge: "EXPERT",
-    badgeColor: "oklch(0.42 0.16 345)",
-    progress: 88,
+      "From responsive grid systems to complex keyframe animations and custom design tokens.",
+    badge: "WEB",
+    badgeColor: "oklch(0.58 0.26 340)",
+    progress: 92,
   },
+  {
+    name: "JavaScript",
+    level: "Proficient",
+    desc: "Dynamic interactivity & logic.",
+    detail:
+      "Building interactive UIs, async data flows, and DOM manipulation with modern ES2024.",
+    badge: "WEB",
+    badgeColor: "oklch(0.75 0.18 70)",
+    progress: 92,
+  },
+];
+
+const backendSkills = [
+  {
+    name: "Python",
+    level: "Advanced",
+    desc: "Numerical computation & scripting.",
+    detail:
+      "Used for physics simulations, data processing pipelines, and scientific computing with NumPy.",
+    badge: "CORE",
+    badgeColor: "oklch(0.72 0.22 320)",
+    progress: 90,
+  },
+  {
+    name: "C#",
+    level: "Proficient",
+    desc: "Game logic & engine integration.",
+    detail:
+      "Building game physics engines and systems-level logic with Unity and .NET ecosystems.",
+    badge: "CORE",
+    badgeColor: "oklch(0.58 0.26 340)",
+    progress: 85,
+  },
+  {
+    name: "Java",
+    level: "Proficient",
+    desc: "Object-oriented systems design.",
+    detail:
+      "Engineering robust, scalable backend logic and large-scale computation algorithms in Java.",
+    badge: "CORE",
+    badgeColor: "oklch(0.65 0.2 25)",
+    progress: 80,
+  },
+];
+
+const specialtySkills = [
   {
     name: "IDA Pro",
     level: "Specialized",
-    desc: "Reverse engineering and binary analysis.",
+    desc: "Reverse engineering & binary analysis.",
     detail:
-      "One of few juniors with hands-on IDA Pro experience — disassembling binaries, understanding call stacks, and analyzing compiled C code at the assembly level.",
+      "One of few juniors with hands-on IDA Pro experience — disassembling binaries, understanding call stacks, and analyzing compiled code at the assembly level.",
     badge: "RARE",
     badgeColor: "oklch(0.65 0.18 60)",
     progress: 70,
     highlight: true,
   },
   {
-    name: "Genzthepixel",
+    name: "BecatTech",
     level: "Creator",
-    desc: "AI-powered math tool serving the local community.",
+    desc: "API Search Engine · DuckDuckGo Alternative",
     detail:
-      "Conceptualized, built, and deployed an AI math tool used by 90% of the local community — from idea to impact.",
+      "Conceptualized, built, and deployed BecatTech — a privacy-first API-powered search engine serving as a DuckDuckGo alternative for the local community.",
     badge: "CREATED",
     badgeColor: "oklch(0.72 0.22 320)",
     progress: 100,
+    highlight: true,
   },
 ];
 
-function AsmCodeBlock() {
-  return (
-    <pre
-      className="code-block text-sm overflow-x-auto"
-      aria-label="IDA Pro assembly disassembly"
-      // biome-ignore lint/security/noDangerouslySetInnerHtml: syntax-highlighted code
-      dangerouslySetInnerHTML={{ __html: asmSnippetFull }}
-    />
-  );
-}
+type Skill = {
+  name: string;
+  level: string;
+  desc: string;
+  detail: string;
+  badge: string;
+  badgeColor: string;
+  progress: number;
+  highlight?: boolean;
+};
 
 function SkillCard({
   skill,
   isVisible,
   index,
 }: {
-  skill: (typeof skills)[0];
+  skill: Skill;
   isVisible: boolean;
   index: number;
 }) {
@@ -78,15 +131,14 @@ function SkillCard({
 
   return (
     <motion.div
-      key={skill.name}
-      className={`p-6 relative overflow-hidden cursor-default ${
+      className={`p-5 relative overflow-hidden cursor-default transition-all duration-700 ${
         isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
       } ${skill.highlight ? "border-2" : "border"}`}
       style={{
-        transitionDelay: `${index * 100}ms`,
+        transitionDelay: `${index * 80}ms`,
         background: skill.highlight ? "oklch(0.13 0.01 280)" : "oklch(1 0 0)",
         borderColor: skill.highlight
-          ? "oklch(0.65 0.18 60 / 0.5)"
+          ? `${skill.badgeColor}60`
           : "oklch(0.88 0.02 340)",
         transform: hovered ? "translateY(-2px)" : "translateY(0)",
         boxShadow: hovered ? `0 8px 24px ${skill.badgeColor}30` : "none",
@@ -99,9 +151,7 @@ function SkillCard({
       {skill.highlight && (
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{
-            background: "oklch(0.65 0.18 60 / 0.03)",
-          }}
+          style={{ background: `${skill.badgeColor}06` }}
           aria-hidden="true"
         />
       )}
@@ -122,10 +172,10 @@ function SkillCard({
         />
       )}
 
-      <div className="flex items-start justify-between mb-3">
-        <div>
+      <div className="flex items-start justify-between mb-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <span
-            className="font-syne text-xs tracking-widest uppercase px-2 py-0.5 mr-3"
+            className="font-syne text-xs tracking-widest uppercase px-2 py-0.5"
             style={{
               background: `${skill.badgeColor}20`,
               color: skill.badgeColor,
@@ -138,7 +188,7 @@ function SkillCard({
             className="font-syne text-xs tracking-[0.2em] uppercase"
             style={{
               color: skill.highlight
-                ? "oklch(0.65 0.18 60)"
+                ? skill.badgeColor
                 : "oklch(0.45 0.02 280)",
             }}
           >
@@ -148,7 +198,7 @@ function SkillCard({
       </div>
 
       <motion.h3
-        className="font-playfair text-2xl mb-2"
+        className="font-playfair text-xl mb-1"
         style={{
           color: skill.highlight
             ? "oklch(0.97 0.01 60)"
@@ -156,9 +206,7 @@ function SkillCard({
         }}
         animate={
           hovered
-            ? {
-                textShadow: `0 0 20px ${skill.badgeColor}60`,
-              }
+            ? { textShadow: `0 0 20px ${skill.badgeColor}60` }
             : { textShadow: "none" }
         }
       >
@@ -166,14 +214,14 @@ function SkillCard({
       </motion.h3>
 
       <p
-        className="font-syne text-sm mb-3 font-semibold"
+        className="font-syne text-xs mb-2 font-semibold"
         style={{ color: skill.badgeColor }}
       >
         {skill.desc}
       </p>
 
       <p
-        className="font-syne text-sm leading-relaxed"
+        className="font-syne text-xs leading-relaxed mb-3"
         style={{
           color: skill.highlight
             ? "oklch(0.65 0.02 280)"
@@ -185,7 +233,6 @@ function SkillCard({
 
       {/* Progress bar */}
       <div
-        className="mt-4"
         role="progressbar"
         tabIndex={-1}
         aria-valuenow={skill.progress}
@@ -220,13 +267,49 @@ function SkillCard({
             animate={{ width: isVisible ? `${skill.progress}%` : "0%" }}
             transition={{
               duration: 1,
-              delay: index * 0.15 + 0.3,
+              delay: index * 0.1 + 0.3,
               ease: [0.22, 1, 0.36, 1],
             }}
           />
         </div>
       </div>
     </motion.div>
+  );
+}
+
+function SkillGroup({
+  title,
+  skills,
+  isVisible,
+  startIndex,
+}: {
+  title: string;
+  skills: Skill[];
+  isVisible: boolean;
+  startIndex: number;
+}) {
+  return (
+    <div>
+      <p
+        className="font-syne text-xs tracking-[0.3em] uppercase mb-3 pb-2"
+        style={{
+          color: "oklch(0.58 0.26 340)",
+          borderBottom: "1px solid oklch(0.58 0.26 340 / 0.2)",
+        }}
+      >
+        {title}
+      </p>
+      <div className="space-y-3">
+        {skills.map((skill, i) => (
+          <SkillCard
+            key={skill.name}
+            skill={skill}
+            isVisible={isVisible}
+            index={startIndex + i}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -237,7 +320,7 @@ export default function ToolkitSection() {
     <section
       id="toolkit"
       ref={sectionRef as React.RefObject<HTMLElement>}
-      className="relative py-32 bg-near-white overflow-hidden"
+      className="relative py-24 md:py-32 bg-near-white overflow-hidden"
       aria-labelledby="toolkit-heading"
     >
       {/* Section number */}
@@ -263,7 +346,6 @@ export default function ToolkitSection() {
           className="animate-orb-3 absolute bottom-1/4 left-0 w-64 h-64 rounded-full blur-3xl"
           style={{ background: "oklch(0.58 0.26 340 / 0.04)" }}
         />
-        {/* Animated scan line */}
         <div
           className="animate-scan-line absolute left-0 w-full h-px opacity-5"
           style={{
@@ -275,7 +357,7 @@ export default function ToolkitSection() {
       <div className="max-w-7xl mx-auto px-6">
         {/* Section header */}
         <div
-          className={`mb-16 transition-all duration-700 ${
+          className={`mb-12 transition-all duration-700 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -310,19 +392,29 @@ export default function ToolkitSection() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Skill cards */}
-          <div className="space-y-4">
-            {skills.map((skill, i) => (
-              <SkillCard
-                key={skill.name}
-                skill={skill}
-                isVisible={isVisible}
-                index={i}
-              />
-            ))}
+          {/* Skill groups */}
+          <div className="space-y-6">
+            <SkillGroup
+              title="Web Technologies"
+              skills={webSkills}
+              isVisible={isVisible}
+              startIndex={0}
+            />
+            <SkillGroup
+              title="Backend & Systems"
+              skills={backendSkills}
+              isVisible={isVisible}
+              startIndex={webSkills.length}
+            />
+            <SkillGroup
+              title="Specialty Tools"
+              skills={specialtySkills}
+              isVisible={isVisible}
+              startIndex={webSkills.length + backendSkills.length}
+            />
           </div>
 
-          {/* IDA Pro code showcase */}
+          {/* Code showcase */}
           <div
             className={`transition-all duration-700 delay-500 ${
               isVisible
@@ -355,12 +447,12 @@ export default function ToolkitSection() {
                 <div
                   className="font-syne text-xs tracking-widest uppercase px-3 py-1"
                   style={{
-                    background: "oklch(0.65 0.18 60 / 0.15)",
-                    color: "oklch(0.65 0.18 60)",
-                    border: "1px solid oklch(0.65 0.18 60 / 0.3)",
+                    background: "oklch(0.72 0.22 320 / 0.15)",
+                    color: "oklch(0.72 0.22 320)",
+                    border: "1px solid oklch(0.72 0.22 320 / 0.3)",
                   }}
                 >
-                  IDA Pro · x86 ASM
+                  Python · Physics
                 </div>
               </div>
 
@@ -368,33 +460,38 @@ export default function ToolkitSection() {
                 className="font-syne text-xs uppercase tracking-[0.3em] mb-4"
                 style={{ color: "oklch(0.55 0.02 280)" }}
               >
-                wind_physics.exe — disassembly view
+                wind_physics.py — simulation core
               </p>
 
-              {/* Assembly code block */}
-              <AsmCodeBlock />
+              {/* Python code block */}
+              <pre
+                className="code-block text-sm overflow-x-auto"
+                aria-label="Python wind physics simulation"
+                // biome-ignore lint/security/noDangerouslySetInnerHtml: syntax-highlighted code
+                dangerouslySetInnerHTML={{ __html: pythonSnippet }}
+              />
 
               <div
                 className="mt-6 p-4"
                 style={{
-                  background: "oklch(0.65 0.18 60 / 0.08)",
-                  border: "1px solid oklch(0.65 0.18 60 / 0.2)",
+                  background: "oklch(0.58 0.26 340 / 0.08)",
+                  border: "1px solid oklch(0.58 0.26 340 / 0.2)",
                 }}
               >
                 <p
                   className="font-syne text-xs uppercase tracking-wider mb-1"
-                  style={{ color: "oklch(0.65 0.18 60)" }}
+                  style={{ color: "oklch(0.72 0.22 320)" }}
                 >
-                  Note
+                  About BecatTech
                 </p>
                 <p
                   className="font-syne text-xs leading-relaxed"
                   style={{ color: "oklch(0.60 0.02 280)" }}
                 >
-                  Reading and analyzing compiled binaries at the assembly level
-                  is a rare skill — especially for a junior developer. IDA Pro
-                  expertise demonstrates deep understanding of how C compiles to
-                  machine code.
+                  BecatTech is Shahed's flagship creation — an API-powered
+                  search engine and DuckDuckGo alternative. Built with HTML,
+                  CSS, JavaScript, and custom API integrations for fast, private
+                  search.
                 </p>
               </div>
 
@@ -404,22 +501,10 @@ export default function ToolkitSection() {
                 style={{ color: "oklch(0.72 0.22 320)" }}
                 aria-hidden="true"
               >
-                <div>
-                  0 1 1 0 1 0 0 1 1 1 0 1 0 0 1 1 0 1 1 0 1 0 0 1 1 1 0 1 0 0 1
-                  1
-                </div>
-                <div>
-                  1 0 0 1 0 1 1 0 0 0 1 0 1 1 0 0 1 0 0 1 0 1 1 0 0 0 1 0 1 1 0
-                  0
-                </div>
-                <div>
-                  0 1 0 1 1 1 0 0 1 0 1 1 0 1 0 1 0 1 0 1 1 1 0 0 1 0 1 1 0 1 0
-                  1
-                </div>
-                <div>
-                  1 1 0 0 0 1 1 0 1 1 0 0 0 0 1 1 1 1 0 0 0 1 1 0 1 1 0 0 0 0 1
-                  1
-                </div>
+                <div>0 1 1 0 1 0 0 1 1 1 0 1 0 0 1 1 0 1 1 0 1 0 0 1 1 1 0</div>
+                <div>1 0 0 1 0 1 1 0 0 0 1 0 1 1 0 0 1 0 0 1 0 1 1 0 0 0 1</div>
+                <div>0 1 0 1 1 1 0 0 1 0 1 1 0 1 0 1 0 1 0 1 1 1 0 0 1 0 1</div>
+                <div>1 1 0 0 0 1 1 0 1 1 0 0 0 0 1 1 1 1 0 0 0 1 1 0 1 1 0</div>
               </div>
             </div>
           </div>

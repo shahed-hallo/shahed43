@@ -1,0 +1,676 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Fonts loaded via Google Fonts (index.html) ─── */
+/* Playfair Display, Syne — loaded as web fonts */
+/* Mono fallbacks handled via system fonts */
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+
+    /* Brand tokens */
+    --fuchsia: 0.58 0.26 340;
+    --rose-gold: 0.62 0.14 350;
+    --deep-blush: 0.42 0.16 345;
+    --dark-bg: 0.13 0.01 280;
+    --darker-bg: 0.09 0.01 280;
+    --near-white: 0.97 0.01 60;
+    --warm-white: 0.94 0.02 60;
+
+    /* Semantic tokens (light) */
+    --background: 0.97 0.01 60;
+    --foreground: 0.13 0.01 280;
+    --card: 1 0 0;
+    --card-foreground: 0.13 0.01 280;
+    --popover: 1 0 0;
+    --popover-foreground: 0.13 0.01 280;
+    --primary: 0.58 0.26 340;
+    --primary-foreground: 1 0 0;
+    --secondary: 0.94 0.02 60;
+    --secondary-foreground: 0.13 0.01 280;
+    --muted: 0.92 0.01 60;
+    --muted-foreground: 0.45 0.02 280;
+    --accent: 0.62 0.14 350;
+    --accent-foreground: 1 0 0;
+    --destructive: 0.577 0.245 27.325;
+    --destructive-foreground: 0.985 0 0;
+    --border: 0.88 0.02 340;
+    --input: 0.88 0.02 340;
+    --ring: 0.58 0.26 340;
+    --chart-1: 0.58 0.26 340;
+    --chart-2: 0.62 0.14 350;
+    --chart-3: 0.42 0.16 345;
+    --chart-4: 0.6 0.18 60;
+    --chart-5: 0.5 0.2 300;
+    --sidebar: 0.13 0.01 280;
+    --sidebar-foreground: 0.97 0.01 60;
+    --sidebar-primary: 0.58 0.26 340;
+    --sidebar-primary-foreground: 1 0 0;
+    --sidebar-accent: 0.2 0.02 280;
+    --sidebar-accent-foreground: 0.97 0.01 60;
+    --sidebar-border: 0.2 0.02 280;
+    --sidebar-ring: 0.58 0.26 340;
+  }
+
+  .dark {
+    --background: 0.13 0.01 280;
+    --foreground: 0.97 0.01 60;
+    --card: 0.17 0.01 280;
+    --card-foreground: 0.97 0.01 60;
+    --popover: 0.17 0.01 280;
+    --popover-foreground: 0.97 0.01 60;
+    --primary: 0.58 0.26 340;
+    --primary-foreground: 1 0 0;
+    --secondary: 0.2 0.02 280;
+    --secondary-foreground: 0.97 0.01 60;
+    --muted: 0.2 0.02 280;
+    --muted-foreground: 0.65 0.02 280;
+    --accent: 0.62 0.14 350;
+    --accent-foreground: 1 0 0;
+    --destructive: 0.704 0.191 22.216;
+    --destructive-foreground: 0.985 0 0;
+    --border: 0.25 0.02 340;
+    --input: 0.25 0.02 340;
+    --ring: 0.58 0.26 340;
+    --sidebar: 0.09 0.01 280;
+    --sidebar-foreground: 0.97 0.01 60;
+    --sidebar-primary: 0.58 0.26 340;
+    --sidebar-primary-foreground: 1 0 0;
+    --sidebar-accent: 0.17 0.01 280;
+    --sidebar-accent-foreground: 0.97 0.01 60;
+    --sidebar-border: 0.2 0.02 280;
+    --sidebar-ring: 0.58 0.26 340;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Syne", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: "Playfair Display", Georgia, serif;
+  }
+}
+
+/* ─── Mesh gradient backgrounds ─── */
+.mesh-gradient-hero {
+  background: radial-gradient(
+      ellipse 80% 60% at 10% 20%,
+      oklch(0.58 0.26 340 / 0.7),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 60% 50% at 90% 80%,
+      oklch(0.42 0.16 345 / 0.8),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 70% 60% at 50% 10%,
+      oklch(0.62 0.2 300 / 0.5),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 50% 70% at 80% 30%,
+      oklch(0.65 0.18 60 / 0.3),
+      transparent
+    ), oklch(0.13 0.01 280);
+}
+
+.mesh-gradient-dark {
+  background: radial-gradient(
+      ellipse 60% 50% at 20% 50%,
+      oklch(0.58 0.26 340 / 0.15),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 50% 60% at 80% 20%,
+      oklch(0.42 0.16 345 / 0.12),
+      transparent
+    ), oklch(0.09 0.01 280);
+}
+
+.mesh-gradient-community {
+  background: radial-gradient(
+      ellipse 70% 50% at 30% 60%,
+      oklch(0.58 0.26 340 / 0.2),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 50% 40% at 70% 30%,
+      oklch(0.42 0.16 345 / 0.15),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 40% 50% at 50% 90%,
+      oklch(0.65 0.18 60 / 0.08),
+      transparent
+    ), oklch(0.09 0.01 280);
+}
+
+/* ─── Typography utilities ─── */
+.font-playfair {
+  font-family: "Playfair Display", Georgia, serif;
+}
+
+.font-syne {
+  font-family: "Syne", sans-serif;
+}
+
+.font-mono-code {
+  font-family: "Geist Mono", "Fira Code", "Cascadia Code", monospace;
+}
+
+/* ─── Pink glow effects ─── */
+.pink-glow {
+  box-shadow: 0 0 40px oklch(0.58 0.26 340 / 0.4), 0 0 80px
+    oklch(0.58 0.26 340 / 0.2), 0 0 160px oklch(0.42 0.16 345 / 0.1);
+}
+
+.pink-glow-sm {
+  box-shadow: 0 0 20px oklch(0.58 0.26 340 / 0.3), 0 0 40px
+    oklch(0.58 0.26 340 / 0.1);
+}
+
+.text-gradient-pink {
+  background: linear-gradient(
+    135deg,
+    oklch(0.58 0.26 340),
+    oklch(0.65 0.18 60),
+    oklch(0.42 0.16 345)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ─── Code blocks ─── */
+.code-block {
+  background: oklch(0.09 0.01 280);
+  border: 1px solid oklch(0.25 0.02 340);
+  border-radius: 8px;
+  padding: 1.5rem;
+  font-family: "Geist Mono", monospace;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  overflow-x: auto;
+  color: oklch(0.85 0.01 60);
+}
+
+.code-block .kw {
+  color: oklch(0.72 0.22 300);
+}
+.code-block .ty {
+  color: oklch(0.7 0.18 200);
+}
+.code-block .fn {
+  color: oklch(0.75 0.18 60);
+}
+.code-block .cm {
+  color: oklch(0.55 0.02 280);
+}
+.code-block .nu {
+  color: oklch(0.65 0.18 160);
+}
+.code-block .st {
+  color: oklch(0.7 0.16 140);
+}
+.code-block .asm-kw {
+  color: oklch(0.72 0.22 300);
+}
+.code-block .asm-reg {
+  color: oklch(0.7 0.18 200);
+}
+.code-block .asm-cm {
+  color: oklch(0.5 0.02 280);
+}
+.code-block .asm-sym {
+  color: oklch(0.75 0.18 60);
+}
+
+/* ─── KaTeX override for dark sections ─── */
+.katex-dark .katex {
+  color: oklch(0.9 0.01 60);
+}
+
+/* ─── Section transitions ─── */
+.section-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s
+    cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.section-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Pink text shimmer on hover ─── */
+.hover-shimmer-text:hover {
+  background: linear-gradient(
+    90deg,
+    oklch(0.58 0.26 340),
+    oklch(0.72 0.22 320),
+    oklch(0.82 0.18 300),
+    oklch(0.58 0.26 340)
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 1.5s linear infinite;
+}
+
+/* ─── Nav link pulsing pink border ─── */
+@keyframes border-glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 oklch(0.58 0.26 340 / 0);
+  }
+  50% {
+    box-shadow: 0 0 0 4px oklch(0.58 0.26 340 / 0.3);
+  }
+}
+
+/* ─── Cursor sparkle animation ─── */
+@keyframes cursor-sparkle {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) translateY(-20px) scale(0);
+  }
+}
+
+/* ─── Floating particles ─── */
+@keyframes float-up {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0);
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-120px) scale(1);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.shimmer-btn {
+  background: linear-gradient(
+    90deg,
+    oklch(0.58 0.26 340) 0%,
+    oklch(0.72 0.22 320) 25%,
+    oklch(0.58 0.26 340) 50%,
+    oklch(0.42 0.16 345) 75%,
+    oklch(0.58 0.26 340) 100%
+  );
+  background-size: 200% auto;
+  animation: shimmer 3s linear infinite;
+}
+
+/* ─── Scrollbar: use browser default ─── */
+
+/* ─── Testimonial slider ─── */
+.testimonial-slider {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+}
+
+/* ─── Profile image clip ─── */
+.profile-clip {
+  clip-path: polygon(0 0, 85% 0, 100% 15%, 100% 100%, 15% 100%, 0 85%);
+}
+
+/* ─── Award card frame ─── */
+.award-frame {
+  border: 2px solid oklch(0.65 0.18 60 / 0.4);
+  box-shadow: inset 0 0 30px oklch(0.65 0.18 60 / 0.05), 0 4px 30px
+    oklch(0.58 0.26 340 / 0.2);
+}
+
+/* ─── Section background animations ─── */
+
+/* Drifting orbs for pink/dark sections */
+@keyframes orb-drift-1 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(40px, -30px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.95);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+@keyframes orb-drift-2 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  40% {
+    transform: translate(-50px, 25px) scale(1.08);
+  }
+  70% {
+    transform: translate(30px, -15px) scale(0.92);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+@keyframes orb-drift-3 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(25px, 40px) scale(1.05);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+/* Slow rotating ring */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Pulsing glow ring */
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(1.04);
+  }
+}
+
+/* Scan-line sweep (toolkit / dark sections) */
+@keyframes scan-line {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(600%);
+    opacity: 0;
+  }
+}
+
+/* Floating diamonds (awards section) */
+@keyframes diamond-float {
+  0% {
+    transform: translateY(0) rotate(45deg);
+    opacity: 0.06;
+  }
+  50% {
+    transform: translateY(-20px) rotate(45deg);
+    opacity: 0.12;
+  }
+  100% {
+    transform: translateY(0) rotate(45deg);
+    opacity: 0.06;
+  }
+}
+
+/* Rising grid lines (projects / white section) */
+@keyframes grid-fade {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.06;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-orb-1 {
+  animation: orb-drift-1 14s ease-in-out infinite;
+}
+.animate-orb-2 {
+  animation: orb-drift-2 18s ease-in-out infinite;
+}
+.animate-orb-3 {
+  animation: orb-drift-3 22s ease-in-out infinite;
+}
+.animate-glow-pulse {
+  animation: glow-pulse 4s ease-in-out infinite;
+}
+.animate-scan-line {
+  animation: scan-line 6s linear infinite;
+}
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+.animate-diamond-1 {
+  animation: diamond-float 8s ease-in-out infinite;
+}
+.animate-diamond-2 {
+  animation: diamond-float 11s ease-in-out infinite 2s;
+}
+.animate-diamond-3 {
+  animation: diamond-float 9s ease-in-out infinite 4s;
+}
+
+/* ─── Marquee ticker ─── */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee 22s linear infinite;
+  will-change: transform;
+}
+
+/* ─── Conic-gradient spinning border ─── */
+@keyframes conic-spin {
+  from {
+    --border-angle: 0deg;
+  }
+  to {
+    --border-angle: 360deg;
+  }
+}
+
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.animated-border {
+  position: relative;
+}
+
+.animated-border::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--border-angle),
+    transparent 20%,
+    oklch(0.58 0.26 340) 40%,
+    oklch(0.72 0.22 320) 60%,
+    transparent 80%
+  );
+  animation: conic-spin 3s linear infinite;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.animated-border > * {
+  position: relative;
+  z-index: 1;
+}
+
+.animated-border:hover::before,
+.animated-border.active-border::before {
+  opacity: 1;
+}
+
+/* ─── Back-to-top button ─── */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    oklch(0.58 0.26 340),
+    oklch(0.42 0.16 345)
+  );
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  z-index: 500;
+  box-shadow: 0 0 20px oklch(0.58 0.26 340 / 0.5), 0 4px 16px rgba(0, 0, 0, 0.3);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s
+    ease, opacity 0.3s ease;
+  animation: back-to-top-appear 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.back-to-top-btn:hover {
+  transform: translateY(-3px) scale(1.08);
+  box-shadow: 0 0 32px oklch(0.58 0.26 340 / 0.8), 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+@keyframes back-to-top-appear {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ─── Click wave burst ─── */
+@keyframes wave-burst {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+/* ─── Stagger word reveal (removed — no typing/word animation) ─── */
+
+/* ─── Tilt card ─── */
+.tilt-card {
+  transform-style: preserve-3d;
+  perspective: 800px;
+  transition: box-shadow 0.3s ease;
+}
+
+/* ─── Pulsing ring for 90% counter ─── */
+@keyframes ring-pulse-out {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.pulse-ring {
+  animation: ring-pulse-out 2s ease-out infinite;
+}
+
+/* ─── Award icon animation ─── */
+@keyframes icon-bounce-spin {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  30% {
+    transform: scale(1.3) rotate(-15deg);
+  }
+  60% {
+    transform: scale(0.95) rotate(10deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.group:hover .award-icon-animate {
+  animation: icon-bounce-spin 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}

@@ -13,7 +13,9 @@ import { motion } from "motion/react";
 import { type FormEvent, useState } from "react";
 import { toast } from "sonner";
 import { useIntersectionObserver } from "../../hooks/useIntersectionObserver";
-import { useSendMessage } from "../../hooks/useQueries";
+
+const APPS_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbzd6eVsAx-E4qSjs4csrgzK3VkPb46Eo0QIC1-du4gFjs-UvYpMsNp2RsUZqJjUPcbU/exec";
 
 const socialLinks = [
   {
@@ -45,33 +47,42 @@ export default function ContactSection() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [isPending, setIsPending] = useState(false);
   const [mouseX, setMouseX] = useState(0);
   const [mouseY, setMouseY] = useState(0);
   const [isMouseOver, setIsMouseOver] = useState(false);
 
-  const { mutate: sendMessage, isPending } = useSendMessage();
-
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !email.trim() || !message.trim()) {
       toast.error("Please fill in all fields.");
       return;
     }
-    sendMessage(
-      { name: name.trim(), email: email.trim(), content: message.trim() },
-      {
-        onSuccess: () => {
-          setSubmitted(true);
-          setName("");
-          setEmail("");
-          setMessage("");
-          toast.success("Message sent! I'll get back to you soon.");
-        },
-        onError: () => {
-          toast.error("Failed to send message. Please try again.");
-        },
-      },
-    );
+    setIsPending(true);
+    try {
+      const body = new URLSearchParams({
+        name: name.trim(),
+        email: email.trim(),
+        message: message.trim(),
+      }).toString();
+
+      await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body,
+      });
+
+      setSubmitted(true);
+      setName("");
+      setEmail("");
+      setMessage("");
+      toast.success("Message sent! I'll get back to you soon.");
+    } catch {
+      toast.error("Failed to send message. Please try again.");
+    } finally {
+      setIsPending(false);
+    }
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
@@ -84,7 +95,7 @@ export default function ContactSection() {
     <section
       id="contact"
       ref={sectionRef as React.RefObject<HTMLElement>}
-      className="relative py-32 overflow-hidden mesh-gradient-hero"
+      className="relative py-24 md:py-32 overflow-hidden mesh-gradient-hero"
       aria-labelledby="contact-heading"
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsMouseOver(true)}
@@ -106,7 +117,6 @@ export default function ContactSection() {
         className="absolute inset-0 pointer-events-none overflow-hidden"
         aria-hidden="true"
       >
-        {/* Mouse-tracking orb */}
         {isMouseOver && (
           <div
             className="absolute rounded-full blur-3xl"
@@ -135,7 +145,7 @@ export default function ContactSection() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-start">
           {/* Left: heading + social */}
           <div
             className={`transition-all duration-700 ${
@@ -162,7 +172,7 @@ export default function ContactSection() {
 
             <motion.h2
               id="contact-heading"
-              className="font-playfair text-5xl md:text-6xl text-near-white mb-8 leading-tight cursor-default"
+              className="font-playfair text-4xl md:text-5xl text-near-white mb-8 leading-tight cursor-default"
               whileHover={{
                 textShadow: "0 0 30px oklch(0.58 0.26 340 / 0.8)",
                 scale: 1.01,
@@ -171,9 +181,9 @@ export default function ContactSection() {
             >
               Let's Create
               <br />
-              Something
-              <br />
-              <em className="text-gradient-pink not-italic">Extraordinary</em>
+              <em className="text-gradient-pink not-italic">
+                Something Extraordinary
+              </em>
             </motion.h2>
 
             <motion.p

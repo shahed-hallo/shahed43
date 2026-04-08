@@ -24,9 +24,9 @@ const socialLinks = [
   },
 ];
 
-const year = new Date().getFullYear();
-
 export default function Footer() {
+  const year = new Date().getFullYear();
+
   return (
     <footer
       style={{ background: "oklch(0.07 0.01 280)" }}
@@ -50,9 +50,14 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-3 mb-4">
               <img
-                src="/assets/generated/shahed-logo-transparent.dim_200x200.png"
+                src="/assets/uploads/shahed-logo-photo.png"
                 alt="Shahed logo"
-                className="h-10 w-10 object-contain"
+                className="h-10 w-10 object-cover"
+                style={{
+                  borderRadius: "50%",
+                  border: "2px solid oklch(0.58 0.26 340 / 0.5)",
+                  boxShadow: "0 0 12px oklch(0.58 0.26 340 / 0.5)",
+                }}
               />
               <span className="font-playfair text-2xl text-near-white">
                 Shahed
@@ -69,7 +74,7 @@ export default function Footer() {
               style={{ color: "oklch(0.45 0.02 280)" }}
             >
               Junior Programmer · Fashionista · Physics Enthusiast · Creator of
-              Genzthepixel
+              BecatTech
             </p>
           </div>
 
@@ -225,7 +230,7 @@ export default function Footer() {
             className="font-syne text-xs"
             style={{ color: "oklch(0.35 0.02 280)" }}
           >
-            Shahed · Genzthepixel
+            Shahed · BecatTech
           </p>
         </div>
       </div>

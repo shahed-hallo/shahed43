@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { ExternalLink } from "lucide-react";
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { useIntersectionObserver } from "../../hooks/useIntersectionObserver";
@@ -176,7 +177,7 @@ export default function ProjectsSection() {
     <section
       id="work"
       ref={sectionRef as React.RefObject<HTMLElement>}
-      className="relative py-32 bg-near-white overflow-hidden"
+      className="relative py-24 md:py-32 bg-near-white overflow-hidden"
       aria-labelledby="work-heading"
     >
       {/* Section number */}
@@ -202,7 +203,6 @@ export default function ProjectsSection() {
           className="animate-orb-1 absolute bottom-0 -left-24 w-80 h-80 rounded-full blur-3xl"
           style={{ background: "oklch(0.42 0.16 345 / 0.05)" }}
         />
-        {/* Diagonal pink line accent */}
         <div
           className="absolute top-0 right-1/4 w-px h-full opacity-5"
           style={{
@@ -214,7 +214,7 @@ export default function ProjectsSection() {
       <div className="max-w-7xl mx-auto px-6">
         {/* Section header */}
         <div
-          className={`mb-16 transition-all duration-700 ${
+          className={`mb-12 transition-all duration-700 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -255,7 +255,7 @@ export default function ProjectsSection() {
 
         {/* Project 1: Wind Physics */}
         <div
-          className={`mb-12 transition-all duration-700 delay-150 ${
+          className={`mb-10 transition-all duration-700 delay-150 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -268,7 +268,7 @@ export default function ProjectsSection() {
               <div className="grid grid-cols-1 lg:grid-cols-2">
                 {/* Code column */}
                 <div
-                  className="p-8 lg:p-12"
+                  className="p-6 lg:p-12"
                   style={{ background: "oklch(0.09 0.01 280)" }}
                 >
                   <div
@@ -321,7 +321,7 @@ export default function ProjectsSection() {
                 </div>
 
                 {/* Info column */}
-                <div className="p-8 lg:p-12 flex flex-col justify-between">
+                <div className="p-6 lg:p-12 flex flex-col justify-between">
                   <div>
                     <div className="flex items-start justify-between mb-6">
                       <span
@@ -353,7 +353,7 @@ export default function ProjectsSection() {
 
                     <motion.h3
                       id="proj1-heading"
-                      className="font-playfair text-4xl text-dark-bg mb-4 leading-tight cursor-default"
+                      className="font-playfair text-3xl text-dark-bg mb-4 leading-tight cursor-default"
                       whileHover={{
                         textShadow: "0 0 30px oklch(0.58 0.26 340 / 0.4)",
                         scale: 1.01,
@@ -390,7 +390,7 @@ export default function ProjectsSection() {
                     style={{ borderTop: "1px solid oklch(0.88 0.02 340)" }}
                   >
                     <p className="font-syne text-xs tracking-[0.2em] uppercase text-dark-bg/40">
-                      Written in C · GCC Optimized
+                      Written in C · Physics Engine
                     </p>
                   </div>
                 </div>
@@ -401,7 +401,7 @@ export default function ProjectsSection() {
 
         {/* Project 2: Numerical Computation */}
         <div
-          className={`transition-all duration-700 delay-300 ${
+          className={`mb-10 transition-all duration-700 delay-300 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -413,7 +413,7 @@ export default function ProjectsSection() {
               <div className="grid grid-cols-1 lg:grid-cols-2">
                 {/* Info column (reversed) */}
                 <div
-                  className="p-8 lg:p-12 flex flex-col justify-between order-2 lg:order-1"
+                  className="p-6 lg:p-12 flex flex-col justify-between order-2 lg:order-1"
                   style={{ background: "oklch(0.97 0.01 60)" }}
                 >
                   <div>
@@ -449,7 +449,7 @@ export default function ProjectsSection() {
 
                     <motion.h3
                       id="proj2-heading"
-                      className="font-playfair text-4xl text-dark-bg mb-4 leading-tight cursor-default"
+                      className="font-playfair text-3xl text-dark-bg mb-4 leading-tight cursor-default"
                       whileHover={{
                         textShadow: "0 0 30px oklch(0.42 0.16 345 / 0.4)",
                         scale: 1.01,
@@ -480,26 +480,35 @@ export default function ProjectsSection() {
                     </ul>
                   </div>
 
-                  {/* Sketch placeholder */}
-                  <div
-                    className="mt-8 p-6 flex items-center justify-center"
-                    style={{
-                      background: "oklch(0.88 0.02 340 / 0.5)",
-                      border: "1px dashed oklch(0.42 0.16 345 / 0.4)",
-                      minHeight: "100px",
-                    }}
-                    role="img"
-                    aria-label="Computation diagram placeholder"
-                  >
-                    <p className="font-mono-code text-xs text-dark-bg/40">
-                      [ Computation Diagram ]
+                  {/* Computation diagram placeholder with caption */}
+                  <div className="mt-8">
+                    <div
+                      className="p-6 flex items-center justify-center"
+                      style={{
+                        background: "oklch(0.88 0.02 340 / 0.5)",
+                        border: "1px dashed oklch(0.42 0.16 345 / 0.4)",
+                        minHeight: "100px",
+                      }}
+                      role="img"
+                      aria-label="Computation diagram"
+                    >
+                      <p className="font-mono-code text-xs text-dark-bg/40">
+                        [ Computation Diagram ]
+                      </p>
+                    </div>
+                    <p
+                      className="font-syne text-xs italic mt-2 text-center"
+                      style={{ color: "oklch(0.58 0.26 340)" }}
+                    >
+                      Computation Diagram — visualizing large-scale numerical
+                      simulation pipeline
                     </p>
                   </div>
                 </div>
 
                 {/* Math formulas column */}
                 <div
-                  className="p-8 lg:p-12 order-1 lg:order-2"
+                  className="p-6 lg:p-12 order-1 lg:order-2"
                   style={{ background: "oklch(0.09 0.01 280)" }}
                 >
                   <p
@@ -569,6 +578,197 @@ export default function ProjectsSection() {
                         Foundation of all dynamics
                       </p>
                     </InteractiveMathBlock>
+                  </div>
+                </div>
+              </div>
+            </TiltArticle>
+          </div>
+        </div>
+
+        {/* Project 3: BecatTech — hyprlink_blank */}
+        <div
+          className={`transition-all duration-700 delay-500 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <div className="animated-border">
+            <TiltArticle
+              className="border border-dark-bg/10 overflow-hidden"
+              aria-labelledby="proj3-heading"
+              style={{ background: "oklch(1 0 0)" }}
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-2">
+                {/* Info column */}
+                <div className="p-6 lg:p-12 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-start justify-between mb-6">
+                      <span
+                        className="font-syne text-xs tracking-[0.3em] uppercase px-3 py-1"
+                        style={{
+                          background: "oklch(0.72 0.22 320 / 0.1)",
+                          color: "oklch(0.72 0.22 320)",
+                          border: "1px solid oklch(0.72 0.22 320 / 0.3)",
+                        }}
+                      >
+                        03
+                      </span>
+                      <div className="flex gap-2 flex-wrap justify-end">
+                        {["HTML", "CSS", "JavaScript", "API"].map((tag) => (
+                          <Badge
+                            key={tag}
+                            variant="outline"
+                            className="font-syne text-xs"
+                            style={{
+                              borderColor: "oklch(0.72 0.22 320 / 0.4)",
+                              color: "oklch(0.72 0.22 320)",
+                            }}
+                          >
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+
+                    <motion.h3
+                      id="proj3-heading"
+                      className="font-playfair text-3xl text-dark-bg mb-4 leading-tight cursor-default"
+                      whileHover={{
+                        textShadow: "0 0 30px oklch(0.72 0.22 320 / 0.4)",
+                        scale: 1.01,
+                        transition: { duration: 0.2 },
+                      }}
+                    >
+                      BecatTech — hyprlink_blank
+                    </motion.h3>
+
+                    <p className="font-syne text-dark-bg/60 leading-relaxed mb-6">
+                      An API-powered search engine built as a DuckDuckGo
+                      alternative. BecatTech delivers fast, private search
+                      results through a clean, modern interface — giving users
+                      control over their search experience.
+                    </p>
+
+                    <ul className="space-y-3">
+                      {[
+                        "Privacy-first API search engine",
+                        "Clean, minimal UI with fast results",
+                        "DuckDuckGo alternative for the community",
+                      ].map((item) => (
+                        <InteractiveLi
+                          key={item}
+                          text={item}
+                          color="oklch(0.72 0.22 320)"
+                        />
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div
+                    className="mt-8 pt-6 flex items-center justify-between"
+                    style={{ borderTop: "1px solid oklch(0.88 0.02 340)" }}
+                  >
+                    <p className="font-syne text-xs tracking-[0.2em] uppercase text-dark-bg/40">
+                      HTML · CSS · JS · API
+                    </p>
+                    <motion.a
+                      href="https://becat.tech/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 font-syne text-xs tracking-widest uppercase px-4 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                      style={{
+                        background: "oklch(0.72 0.22 320 / 0.1)",
+                        color: "oklch(0.72 0.22 320)",
+                        border: "1px solid oklch(0.72 0.22 320 / 0.4)",
+                      }}
+                      whileHover={{
+                        scale: 1.03,
+                        boxShadow: "0 0 20px oklch(0.72 0.22 320 / 0.4)",
+                        background: "oklch(0.72 0.22 320 / 0.2)",
+                        transition: { duration: 0.2 },
+                      }}
+                      data-ocid="projects.becat_link"
+                    >
+                      <ExternalLink className="w-3 h-3" aria-hidden="true" />
+                      Visit Site
+                    </motion.a>
+                  </div>
+                </div>
+
+                {/* Visual column */}
+                <div
+                  className="p-6 lg:p-12 flex flex-col justify-center items-center min-h-[280px]"
+                  style={{ background: "oklch(0.09 0.01 280)" }}
+                >
+                  {/* BecatTech visual mockup */}
+                  <div className="w-full max-w-xs">
+                    <div
+                      className="p-6 mb-4"
+                      style={{
+                        background: "oklch(0.13 0.01 280)",
+                        border: "1px solid oklch(0.25 0.02 340)",
+                      }}
+                    >
+                      <div
+                        className="flex items-center gap-2 mb-4"
+                        aria-hidden="true"
+                      >
+                        <div
+                          className="w-2 h-2 rounded-full"
+                          style={{ background: "oklch(0.65 0.2 25)" }}
+                        />
+                        <div
+                          className="w-2 h-2 rounded-full"
+                          style={{ background: "oklch(0.75 0.18 70)" }}
+                        />
+                        <div
+                          className="w-2 h-2 rounded-full"
+                          style={{ background: "oklch(0.65 0.2 150)" }}
+                        />
+                        <span
+                          className="ml-2 font-mono-code text-xs"
+                          style={{ color: "oklch(0.45 0.02 280)" }}
+                        >
+                          becat.tech
+                        </span>
+                      </div>
+                      <div
+                        className="h-8 mb-3 flex items-center px-3"
+                        style={{
+                          background: "oklch(0.17 0.01 280)",
+                          border: "1px solid oklch(0.72 0.22 320 / 0.3)",
+                        }}
+                      >
+                        <span
+                          className="font-syne text-xs"
+                          style={{ color: "oklch(0.72 0.22 320)" }}
+                        >
+                          🔍 becat.tech/search?q=...
+                        </span>
+                      </div>
+                      <div className="space-y-2">
+                        {[
+                          "Fast private search",
+                          "API-powered results",
+                          "Clean UI",
+                        ].map((line) => (
+                          <div
+                            key={line}
+                            className="h-2 rounded-sm"
+                            style={{
+                              background: "oklch(0.25 0.02 340)",
+                              width: `${line.length * 6}px`,
+                              maxWidth: "100%",
+                            }}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    <p
+                      className="font-syne text-xs text-center tracking-wider uppercase"
+                      style={{ color: "oklch(0.72 0.22 320 / 0.6)" }}
+                    >
+                      API Search Engine · DuckDuckGo Alternative
+                    </p>
                   </div>
                 </div>
               </div>

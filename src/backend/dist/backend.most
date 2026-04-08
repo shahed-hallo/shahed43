@@ -1,0 +1,5 @@
+// Version: 1.0.0
+type Message__19119041 = {content : Text; email : Text; name : Text};
+actor {
+  stable var messages : [Message__19119041]
+};
